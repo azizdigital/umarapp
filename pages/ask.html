@@ -1,0 +1,3400 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Penilaian Asas - Asas Sains Komputer Tingkatan 1</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    
+    <style>
+        /* ============================================
+           DESIGN SYSTEM & CSS VARIABLES
+           ============================================ */
+        :root {
+            /* Color Palette - Educational Blue with Warm Accents */
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary: #f59e0b;
+            --secondary-light: #fef3c7;
+            
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            
+            /* Typography */
+            --font-display: 'Poppins', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            
+            /* Transitions */
+            --transition: all 0.2s ease;
+        }
+        
+        /* ============================================
+           GLOBAL STYLES
+           ============================================ */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Decorative background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        /* ============================================
+           LAYOUT COMPONENTS
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            background: var(--surface);
+            box-shadow: var(--shadow);
+            padding: var(--spacing-lg) 0;
+            margin-bottom: var(--spacing-xl);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 0.125rem;
+        }
+        
+        .logo-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--text);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-lg {
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: 1.0625rem;
+        }
+        
+        .btn-sm {
+            padding: 0.375rem var(--spacing-sm);
+            font-size: 0.875rem;
+        }
+        
+        /* ============================================
+           CARDS
+           ============================================ */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow);
+            margin-bottom: var(--spacing-lg);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-header {
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--gray-100);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .card-subtitle {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+        
+        /* ============================================
+           HOME PAGE - SET SELECTION
+           ============================================ */
+        .hero {
+            text-align: center;
+            padding: var(--spacing-2xl) 0;
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .set-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .set-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 3px solid transparent;
+        }
+        
+        .set-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+        
+        .set-card.completed {
+            border-color: var(--success);
+        }
+        
+        .set-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .set-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .set-info {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .set-info-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: var(--spacing-sm);
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-warning {
+            background: var(--secondary-light);
+            color: #92400e;
+        }
+        
+        /* ============================================
+           EXAM PAGE
+           ============================================ */
+        .exam-header {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            box-shadow: var(--shadow);
+        }
+        
+        .exam-info {
+            display: flex;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+        
+        .exam-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .exam-info-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .exam-info-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            background: var(--primary-light);
+            border-radius: var(--radius-md);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .timer.warning {
+            background: #fef3c7;
+            color: #92400e;
+            animation: pulse 1s infinite;
+        }
+        
+        .timer.danger {
+            background: #fee2e2;
+            color: #991b1b;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .exam-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        /* Question Navigation */
+        .question-nav {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow);
+        }
+        
+        .question-nav h3 {
+            font-size: 1rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+        }
+        
+        /* Section Tabs */
+        .section-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .section-tab {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            position: relative;
+            bottom: -2px;
+        }
+        
+        .section-tab:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .section-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: var(--spacing-sm);
+        }
+        
+        .nav-btn {
+            aspect-ratio: 1;
+            border: 2px solid var(--gray-200);
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .nav-btn.answered {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .nav-btn.bookmarked {
+            background: var(--secondary-light);
+            border-color: var(--secondary);
+        }
+        
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Question Display */
+        .question-section {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .question-number {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--gray-100);
+            padding: 0.375rem var(--spacing-sm);
+            border-radius: var(--radius-sm);
+        }
+        
+        .bookmark-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .question-text {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            margin-bottom: var(--spacing-xl);
+            color: var(--text);
+        }
+        
+        /* MCQ Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .option {
+            display: flex;
+            align-items: start;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .option input[type="radio"] {
+            margin-top: 0.25rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .option-label {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            cursor: pointer;
+        }
+        
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        /* Written Answer Section */
+        .answer-section {
+            margin-top: var(--spacing-lg);
+        }
+        
+        .answer-modes {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .mode-btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: 2px solid var(--gray-200);
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .mode-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .answer-input {
+            width: 100%;
+            min-height: 150px;
+            padding: var(--spacing-md);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            resize: vertical;
+            transition: var(--transition);
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        /* Canvas for writing */
+        .canvas-container {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: white;
+        }
+        
+        .canvas-tools {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .tool-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        
+        .tool-btn:hover {
+            background: var(--gray-100);
+        }
+        
+        .tool-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        #writingCanvas {
+            display: block;
+            width: 100%;
+            touch-action: none;
+        }
+        
+        /* Navigation Buttons */
+        .question-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-xl);
+            gap: var(--spacing-md);
+        }
+        
+        /* ============================================
+           TEACHER MODE
+           ============================================ */
+        .submissions-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+        
+        .submission-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .submission-card.marked {
+            border-left-color: var(--success);
+        }
+        
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .submission-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .submission-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .marking-section {
+            margin-top: var(--spacing-lg);
+        }
+        
+        .marking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--spacing-md);
+        }
+        
+        .marking-table th,
+        .marking-table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .marking-table th {
+            background: var(--gray-50);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .mark-input {
+            width: 80px;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.9375rem;
+            text-align: center;
+        }
+        
+        .mark-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* ============================================
+           RESULTS PAGE
+           ============================================ */
+        .results-hero {
+            text-align: center;
+            padding: var(--spacing-2xl);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-xl);
+            color: white;
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .results-hero h1 {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .grade-display {
+            font-size: 6rem;
+            font-weight: 700;
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .score-display {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .chart-container {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow);
+        }
+        
+        /* ============================================
+           ANALYTICS DASHBOARD
+           ============================================ */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .achievement-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .achievement-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .achievement-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .achievement-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+        
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+        
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: var(--spacing-sm);
+            justify-content: flex-end;
+            margin-top: var(--spacing-xl);
+        }
+        
+        .input-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text);
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-md);
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .set-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .exam-header {
+                flex-direction: column;
+            }
+            
+            .exam-info {
+                width: 100%;
+            }
+            
+            .timer {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .exam-actions {
+                width: 100%;
+            }
+            
+            .exam-actions button {
+                flex: 1;
+            }
+            
+            .question-footer {
+                flex-direction: column;
+            }
+            
+            .question-footer button {
+                width: 100%;
+            }
+            
+            .grade-display {
+                font-size: 4rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-0 { margin-bottom: 0; }
+        .mb-sm { margin-bottom: var(--spacing-sm); }
+        .mb-md { margin-bottom: var(--spacing-md); }
+        .mb-lg { margin-bottom: var(--spacing-lg); }
+        .mb-xl { margin-bottom: var(--spacing-xl); }
+        
+        .mt-0 { margin-top: 0; }
+        .mt-sm { margin-top: var(--spacing-sm); }
+        .mt-md { margin-top: var(--spacing-md); }
+        .mt-lg { margin-top: var(--spacing-lg); }
+        .mt-xl { margin-top: var(--spacing-xl); }
+        
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Alert Messages */
+        .alert {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--success);
+        }
+        
+        .alert-warning {
+            background: var(--secondary-light);
+            color: #92400e;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid var(--danger);
+        }
+        
+        .alert-info {
+            background: var(--primary-light);
+            color: #1e40af;
+            border-left: 4px solid var(--info);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">📚</div>
+                <div class="logo-text">
+                    <h1>Asas Sains Komputer</h1>
+                    <p>Tingkatan 1</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="showPage('analytics')">📊 Analytics</button>
+                <button class="btn btn-outline" onclick="showTeacherLogin()">👨‍🏫 Teacher</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page - Set Selection -->
+    <div id="homePage" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>Ujian Penilaian Asas</h1>
+                <p>Pilih set ujian untuk memulakan latihan anda</p>
+            </div>
+            
+            <div class="set-grid" id="setGrid">
+                <!-- Sets will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Page -->
+    <div id="examPage" class="page">
+        <div class="container">
+            <div class="exam-header">
+                <div class="exam-info">
+                    <div class="exam-info-item">
+                        <div class="exam-info-label">Set</div>
+                        <div class="exam-info-value" id="currentSet">-</div>
+                    </div>
+                    <div class="exam-info-item">
+                        <div class="exam-info-label">Bahagian</div>
+                        <div class="exam-info-value" id="currentSection">-</div>
+                    </div>
+                    <div class="exam-info-item">
+                        <div class="exam-info-label">Soalan</div>
+                        <div class="exam-info-value" id="currentQuestion">-</div>
+                    </div>
+                </div>
+                <div class="timer" id="timer">
+                    <span>⏱️</span>
+                    <span id="timerDisplay">60:00</span>
+                </div>
+                <div class="exam-actions">
+                    <button class="btn btn-secondary" id="pauseBtn" onclick="togglePause()">⏸️ Pause</button>
+                    <button class="btn btn-danger" onclick="confirmExit()">🚪 Keluar</button>
+                </div>
+            </div>
+
+            <!-- Section Tabs -->
+            <div class="card">
+                <div class="section-tabs">
+                    <button class="section-tab active" onclick="switchSection('A')">
+                        📝 Bahagian A - Aneka Pilihan (10 markah)
+                    </button>
+                    <button class="section-tab" onclick="switchSection('B')">
+                        ✍️ Bahagian B - Soalan Pendek (20 markah)
+                    </button>
+                    <button class="section-tab" onclick="switchSection('C')">
+                        📄 Bahagian C - Esei (10 markah)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Navigation -->
+            <div class="question-nav">
+                <h3>Navigasi Soalan</h3>
+                <div class="nav-grid" id="questionNav">
+                    <!-- Nav buttons will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Question Display -->
+            <div class="question-section" id="questionDisplay">
+                <!-- Question content will be populated by JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="question-footer">
+                <button class="btn btn-secondary btn-lg" id="prevBtn" onclick="previousQuestion()">← Sebelum</button>
+                <button class="btn btn-primary btn-lg" id="nextBtn" onclick="nextQuestion()">Seterusnya →</button>
+                <button class="btn btn-success btn-lg hidden" id="submitBtn" onclick="confirmSubmit()">✓ Hantar Ujian</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Mode -->
+    <div id="teacherPage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Mod Guru - Penilaian</h2>
+                    <p class="card-subtitle">Tandakan dan semak jawapan pelajar</p>
+                </div>
+                
+                <div class="submissions-grid" id="submissionsGrid">
+                    <!-- Submissions will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="text-center mt-xl">
+                <button class="btn btn-secondary btn-lg" onclick="showPage('home')">← Kembali</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Page -->
+    <div id="analyticsPage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Dashboard Analytics</h2>
+                    <p class="card-subtitle">Prestasi dan kemajuan pembelajaran</p>
+                </div>
+                
+                <!-- Stats Grid -->
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Stats will be populated by JavaScript -->
+                </div>
+                
+                <!-- Performance Chart -->
+                <div class="chart-container">
+                    <h3 class="mb-md">Prestasi Mengikut Set</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                
+                <!-- Topic Performance -->
+                <div class="chart-container">
+                    <h3 class="mb-md">Prestasi Mengikut Topik</h3>
+                    <canvas id="topicChart"></canvas>
+                </div>
+                
+                <!-- Achievements -->
+                <div class="card mt-xl">
+                    <h3 class="mb-lg">🏆 Pencapaian</h3>
+                    <div class="analytics-grid" id="achievementsGrid">
+                        <!-- Achievements will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-xl">
+                <button class="btn btn-secondary btn-lg" onclick="showPage('home')">← Kembali</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page">
+        <div class="container">
+            <div class="results-hero">
+                <h1>Keputusan Ujian</h1>
+                <div class="grade-display" id="gradeDisplay">-</div>
+                <div class="score-display" id="scoreDisplay">- / 40</div>
+            </div>
+            
+            <div class="stats-grid" id="resultStats">
+                <!-- Result stats will be populated -->
+            </div>
+            
+            <div class="card">
+                <h3 class="mb-md">Analisis Prestasi</h3>
+                <canvas id="resultChart"></canvas>
+            </div>
+            
+            <div class="text-center mt-xl">
+                <button class="btn btn-primary btn-lg" onclick="exportToPDF()">📄 Export PDF</button>
+                <button class="btn btn-secondary btn-lg" onclick="showPage('home')">← Kembali</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Student Info Modal -->
+    <div id="studentInfoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Maklumat Pelajar</h2>
+                <p>Sila masukkan maklumat anda sebelum memulakan ujian</p>
+            </div>
+            
+            <div class="input-group">
+                <label>Nama</label>
+                <input type="text" id="studentName" placeholder="Nama penuh">
+            </div>
+            
+            <div class="input-group">
+                <label>No. Kad Pengenalan</label>
+                <input type="text" id="studentIC" placeholder="Contoh: 060101-01-0001">
+            </div>
+            
+            <div class="input-group">
+                <label>Kelas</label>
+                <input type="text" id="studentClass" placeholder="Contoh: 1 Amanah">
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('studentInfoModal')">Batal</button>
+                <button class="btn btn-primary" onclick="startExam()">Mula Ujian</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Login Modal -->
+    <div id="teacherLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Log Masuk Guru</h2>
+                <p>Masukkan kata laluan untuk akses mod guru</p>
+            </div>
+            
+            <div id="loginAlert" class="alert alert-danger hidden">
+                <span>❌</span>
+                <span id="loginAlertMessage"></span>
+            </div>
+            
+            <div class="input-group">
+                <label>Kata Laluan</label>
+                <input type="password" id="teacherPassword" placeholder="Masukkan kata laluan">
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('teacherLoginModal')">Batal</button>
+                <button class="btn btn-primary" onclick="teacherLogin()">Log Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Submit Modal -->
+    <div id="confirmSubmitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Hantar Ujian?</h2>
+                <p>Adakah anda pasti ingin menghantar ujian? Anda tidak boleh mengubah jawapan selepas ini.</p>
+            </div>
+            
+            <div class="alert alert-warning">
+                <span>⚠️</span>
+                <span>Pastikan semua jawapan telah dijawab sebelum hantar.</span>
+            </div>
+            
+            <div id="submissionSummary">
+                <!-- Summary will be populated -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('confirmSubmitModal')">Semak Semula</button>
+                <button class="btn btn-success" onclick="submitExam()">Ya, Hantar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Exit Modal -->
+    <div id="confirmExitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Keluar dari Ujian?</h2>
+                <p>Kemajuan anda akan disimpan. Anda boleh sambung kemudian.</p>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('confirmExitModal')">Batal</button>
+                <button class="btn btn-danger" onclick="exitExam()">Ya, Keluar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marking Modal for Teacher -->
+    <div id="markingModal" class="modal">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h2>Tandakan Jawapan</h2>
+                <p id="markingStudentInfo"></p>
+            </div>
+            
+            <div id="markingContent">
+                <!-- Bahagian A Results -->
+                <div class="card mb-lg">
+                    <h3 class="mb-md">Bahagian A - Aneka Pilihan (10 markah)</h3>
+                    <div class="alert alert-success">
+                        <span>✓</span>
+                        <span>Auto-marked: <strong id="bahagianAScore">-</strong>/10 markah</span>
+                    </div>
+                    <div id="bahagianADetails"></div>
+                </div>
+                
+                <!-- Bahagian B Marking -->
+                <div class="card mb-lg">
+                    <h3 class="mb-md">Bahagian B - Soalan Pendek (20 markah)</h3>
+                    <div id="bahagianBMarking"></div>
+                    <div class="mt-md">
+                        <strong>Jumlah Bahagian B: <span id="totalBahagianB">0</span>/20 markah</strong>
+                    </div>
+                </div>
+                
+                <!-- Bahagian C Marking -->
+                <div class="card mb-lg">
+                    <h3 class="mb-md">Bahagian C - Esei (10 markah)</h3>
+                    <div id="bahagianCMarking"></div>
+                    <div class="mt-md">
+                        <strong>Jumlah Bahagian C: <span id="totalBahagianC">0</span>/10 markah</strong>
+                    </div>
+                </div>
+                
+                <!-- Total Score -->
+                <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">
+                    <div style="text-align: center;">
+                        <h2 style="margin-bottom: 1rem;">Jumlah Keseluruhan</h2>
+                        <div style="font-size: 3rem; font-weight: 700;" id="totalScore">0/40</div>
+                        <div style="font-size: 1.5rem; opacity: 0.9;" id="totalGrade">-</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('markingModal')">Batal</button>
+                <button class="btn btn-success" onclick="saveMarking()">💾 Simpan Markah</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // EXAM DATA - Embedded from questions.js
+        // ============================================
+        const EXAM_DATA = {
+            examTitle: "Ujian Penilaian Asas - Asas Sains Komputer",
+            examLevel: "Tingkatan 1",
+            duration: 3600,
+            totalMarks: 40,
+            sets: {
+                set1: {
+                    title: "Set 1 - Kertas Asal",
+                    bahagianA: [
+                        {
+                            id: "A1",
+                            soalan: "Antara berikut, penyataan manakah yang tidak benar berkaitan fungsi sistem pengoperasian?",
+                            pilihan: [
+                                "Mencipta carta dari satu baris data.",
+                                "Memantau pengurusan perkakasan.",
+                                "Menukar bahasa pengaturcaraan ke bahasa mesin.",
+                                "Menjadual penggunaan sumber dan tugas komputer."
+                            ],
+                            jawapan: 0,
+                            markah: 1,
+                            topik: "Sistem Pengoperasian"
+                        },
+                        {
+                            id: "A2",
+                            soalan: "___________________ merujuk kepada bahasa yang digunakan untuk membangunkan hypertext di dalam WWW atau Internet.",
+                            pilihan: ["URL", "FTTP", "HTML", "Bahasa generasi kelima"],
+                            jawapan: 2,
+                            markah: 1,
+                            topik: "Teknologi Web"
+                        },
+                        {
+                            id: "A3",
+                            soalan: "Antara berikut penyataan manakah yang merupakan fungsi yang paling tepat berkenaan dengan pelayan web?",
+                            pilihan: [
+                                "Mengenalpasti setiap transaksi dalam internet.",
+                                "Mengimbas dan mengakses grafik dari rangkaian web sedunia.",
+                                "Mengakses dan menyimpan maklumat dari rangkaian komputer.",
+                                "Mengimbas dan mengakses maklumat dari rangkaian web sedunia."
+                            ],
+                            jawapan: 3,
+                            markah: 1,
+                            topik: "Teknologi Web"
+                        },
+                        {
+                            id: "A4",
+                            soalan: "Alamat protokol Internet adalah alamat yang digunakan bagi ___________.",
+                            pilihan: [
+                                "mengenalpasti setiap transaksi dalam internet.",
+                                "mengenalpasti setiap komputer dalam internet.",
+                                "mengenalpasti setiap pencetak dalam rangkaian.",
+                                "mengenalpasti setiap komponen dalam komputer."
+                            ],
+                            jawapan: 1,
+                            markah: 1,
+                            topik: "Rangkaian"
+                        },
+                        {
+                            id: "A5",
+                            soalan: "Satu contoh sistem komputer yang direka untuk menampung beberapa pengguna pada masa yang sama adalah _______________.",
+                            pilihan: ["telefon pintar", "komputer riba", "mikrokomputer", "kerangka utama"],
+                            jawapan: 3,
+                            markah: 1,
+                            topik: "Sistem Komputer"
+                        },
+                        {
+                            id: "A6",
+                            soalan: "Antara berikut adalah kegunaan perisian aplikasi kecuali_____________.",
+                            pilihan: [
+                                "melakukan penipuan",
+                                "sebagai alamat perniagaan",
+                                "memudahkan komunikasi",
+                                "untuk menyokong aktiviti di rumah, peribadi dan pendidikan"
+                            ],
+                            jawapan: 0,
+                            markah: 1,
+                            topik: "Perisian"
+                        },
+                        {
+                            id: "A7",
+                            soalan: "Antara berikut merupakan pengurus fail (file manager) dalam persekitaran Windows kecuali _____________.",
+                            pilihan: [
+                                "Penyahpasang (Uninstaller)",
+                                "Paparan Imej (Image Viewer)",
+                                "Direktori Aktif (Active Directory)",
+                                "Utiliti Diagnosis (Diagnostic Utility)"
+                            ],
+                            jawapan: 2,
+                            markah: 1,
+                            topik: "Sistem Pengoperasian"
+                        },
+                        {
+                            id: "A8",
+                            soalan: "Antara berikut yang manakah bukan enjin carian (search engine)?",
+                            pilihan: ["Bing", "Google", "Yahoo!", "Threads"],
+                            jawapan: 3,
+                            markah: 1,
+                            topik: "Internet"
+                        },
+                        {
+                            id: "A9",
+                            soalan: "Antara berikut yang manakah merupakan format grafik?",
+                            pilihan: ["MP3", "WMV", "JPEG", "DOCX"],
+                            jawapan: 2,
+                            markah: 1,
+                            topik: "Fail & Media"
+                        },
+                        {
+                            id: "A10",
+                            soalan: "Antara berikut yang manakah tidak berkaitan dengan sistem pengurusan pangkalan data?",
+                            pilihan: ["Atribut", "Rekod", "Formula", "Laporan"],
+                            jawapan: 2,
+                            markah: 1,
+                            topik: "Pangkalan Data"
+                        }
+                    ],
+                    bahagianB: [
+                        {
+                            id: "B1",
+                            soalan: "Nyatakan definisi peranti input dan peranti output serta berikan satu contoh untuk setiapnya.",
+                            jenis: "jadual",
+                            bahagian: [
+                                {
+                                    label: "Peranti Input - Definisi",
+                                    skema: "Peranti yang digunakan untuk memasukkan data ke dalam komputer",
+                                    markah: 1
+                                },
+                                {
+                                    label: "Peranti Input - Contoh",
+                                    skema: "Tetikus, Papan kekunci",
+                                    markah: 1
+                                },
+                                {
+                                    label: "Peranti Output - Definisi",
+                                    skema: "Peranti yang digunakan untuk mengeluarkan maklumat daripada komputer",
+                                    markah: 1
+                                },
+                                {
+                                    label: "Peranti Output - Contoh",
+                                    skema: "Pencetak, monitor",
+                                    markah: 1
+                                }
+                            ],
+                            jumlahMarkah: 4,
+                            topik: "Perkakasan"
+                        },
+                        {
+                            id: "B2",
+                            soalan: "Dalam sistem tempahan makanan secara dalam talian, nyatakan empat bahagian kecil yang boleh dihasilkan melalui leraian masalah.",
+                            jenis: "list",
+                            skema: [
+                                "Pendaftaran atau log masuk pengguna",
+                                "Pemilihan menu makanan",
+                                "Pengesahan pesanan",
+                                "Pembayaran dan penghantaran"
+                            ],
+                            markahSetiap: 1,
+                            jumlahMarkah: 4,
+                            topik: "Penyelesaian Masalah"
+                        },
+                        {
+                            id: "B3",
+                            soalan: "Nyatakan empat kelebihan menggunakan carta alir dalam penyelesaian masalah.",
+                            jenis: "list",
+                            skema: [
+                                "Memberi gambaran visual proses",
+                                "Mudah difahami oleh pelbagai pengguna",
+                                "Memudahkan pengesanan ralat",
+                                "Membantu perancangan sebelum pengaturcaraan"
+                            ],
+                            markahSetiap: 1,
+                            jumlahMarkah: 4,
+                            topik: "Penyelesaian Masalah"
+                        },
+                        {
+                            id: "B4",
+                            soalan: "Rajah 1 menunjukkan satu jadual pangkalan data pelajar. Berdasarkan Rajah 1, nyatakan empat kegunaan pangkalan data tersebut kepada pihak sekolah.",
+                            jenis: "list",
+                            skema: [
+                                "Menyimpan maklumat pelajar",
+                                "Memudahkan carian data",
+                                "Mengemaskini rekod dengan cepat",
+                                "Menjana laporan"
+                            ],
+                            markahSetiap: 1,
+                            jumlahMarkah: 4,
+                            topik: "Pangkalan Data"
+                        },
+                        {
+                            id: "B5",
+                            soalan: "Rajah 2 menunjukkan situasi amaran keselamatan di mana satu mesej mencurigakan telah diterima. Berdasarkan Rajah 2, nyatakan empat tindakan selamat yang patut diambil oleh pelajar.",
+                            jenis: "list",
+                            skema: [
+                                "Tidak klik pautan mencurigakan",
+                                "Tidak berkongsi maklumat peribadi",
+                                "Melaporkan kepada guru / pentadbir",
+                                "Memadam mesej tersebut"
+                            ],
+                            markahSetiap: 1,
+                            jumlahMarkah: 4,
+                            topik: "Keselamatan"
+                        }
+                    ],
+                    bahagianC: {
+                        id: "C1",
+                        soalan: "Rajah 3 menunjukkan model Input–Proses–Output (IPO) bagi sistem pengiraan markah pelajar.",
+                        diagram: {
+                            input: ["Nama Pelajar", "Markah Pelajar (0-100)"],
+                            proses: [
+                                "1. Semak Markah Pelajar",
+                                "2. Tentukan Gred Berdasarkan Peratus:",
+                                "   • 80-100 → A",
+                                "   • 60-79 → B",
+                                "   • 40-59 → C",
+                                "   • < 40 → D"
+                            ],
+                            output: ["Nama Pelajar", "Markah", "Gred"]
+                        },
+                        subSoalan: [
+                            {
+                                id: "C1a",
+                                soalan: "Berdasarkan Rajah 3, nyatakan tiga jenis data input yang diperlukan oleh sistem.",
+                                skema: ["Markah ujian", "Markah kerja kursus", "Markah peperiksaan akhir"],
+                                markah: 3
+                            },
+                            {
+                                id: "C1b",
+                                soalan: "Terangkan empat langkah proses yang berlaku untuk menghasilkan keputusan markah pelajar.",
+                                skema: [
+                                    "Sistem menerima semua markah pelajar",
+                                    "Markah dijumlahkan atau dikira purata",
+                                    "Markah dibandingkan dengan skema pemarkahan",
+                                    "Gred atau status pelajar ditentukan"
+                                ],
+                                markah: 4
+                            },
+                            {
+                                id: "C1c",
+                                soalan: "Nyatakan tiga output yang dihasilkan oleh sistem tersebut.",
+                                skema: ["Jumlah markah atau purata", "Gred pelajar", "Status lulus atau gagal"],
+                                markah: 3
+                            }
+                        ],
+                        jumlahMarkah: 10,
+                        topik: "IPO"
+                    }
+                },
+                
+                set2: {
+                    title: "Ujian 2",
+                    bahagianA: [
+                        { id: "A1", soalan: "Sistem fail FAT32 mempunyai had saiz fail maksimum sebanyak ___________.", pilihan: ["2GB", "4GB", "8GB", "16GB"], jawapan: 1, markah: 1, topik: "Sistem Fail" },
+                        { id: "A2", soalan: "CSS digunakan untuk ___________.", pilihan: ["mengawal rupa laman web", "mencipta pangkalan data", "menghantar e-mel", "mencetak dokumen"], jawapan: 0, markah: 1, topik: "Teknologi Web" },
+                        { id: "A3", soalan: "Protokol HTTP beroperasi pada lapisan ___________ model OSI.", pilihan: ["Fizikal", "Rangkaian", "Pengangkutan", "Aplikasi"], jawapan: 3, markah: 1, topik: "Rangkaian" },
+                        { id: "A4", soalan: "RAM adalah singkatan untuk ___________.", pilihan: ["Random Access Memory", "Read Access Memory", "Rapid Access Memory", "Remote Access Memory"], jawapan: 0, markah: 1, topik: "Perkakasan" },
+                        { id: "A5", soalan: "Perisian yang membolehkan komputer berkomunikasi dengan perkakasan dipanggil ___________.", pilihan: ["Aplikasi", "Utiliti", "Pemacu", "Sistem Operasi"], jawapan: 2, markah: 1, topik: "Perisian" },
+                        { id: "A6", soalan: "Compression ratio 10:1 bermaksud ___________.", pilihan: ["fail dikecilkan 10 kali", "fail dibesarkan 10 kali", "fail dikecilkan kepada 1/10", "fail kekal sama"], jawapan: 2, markah: 1, topik: "Fail" },
+                        { id: "A7", soalan: "Firewall berfungsi untuk ___________.", pilihan: ["mempercepatkan internet", "melindungi rangkaian", "mencipta backup", "mengoptimumkan CPU"], jawapan: 1, markah: 1, topik: "Keselamatan" },
+                        { id: "A8", soalan: "Topologi rangkaian yang paling mahal tetapi paling selamat ialah ___________.", pilihan: ["Bus", "Bintang", "Cincin", "Mesh"], jawapan: 3, markah: 1, topik: "Rangkaian" },
+                        { id: "A9", soalan: "Antara berikut, yang manakah format audio?", pilihan: ["AVI", "MP3", "PNG", "PDF"], jawapan: 1, markah: 1, topik: "Fail & Media" },
+                        { id: "A10", soalan: "Primary key dalam pangkalan data digunakan untuk ___________.", pilihan: ["mengurutkan data", "mengenal pasti rekod unik", "memadam data", "mencetak laporan"], jawapan: 1, markah: 1, topik: "Pangkalan Data" }
+                    ],
+                    bahagianB: [
+                        { id: "B1", soalan: "Nyatakan definisi HTML dan CSS serta berikan satu fungsi untuk setiapnya.", jenis: "jadual", bahagian: [
+                            { label: "HTML - Definisi", skema: "Bahasa untuk membina struktur laman web", markah: 1 },
+                            { label: "HTML - Fungsi", skema: "Mencipta kandungan dan struktur halaman web", markah: 1 },
+                            { label: "CSS - Definisi", skema: "Bahasa untuk mengawal rupa laman web", markah: 1 },
+                            { label: "CSS - Fungsi", skema: "Menghias dan format laman web", markah: 1 }
+                        ], jumlahMarkah: 4, topik: "Teknologi Web" },
+                        { id: "B2", soalan: "Dalam sistem perpustakaan sekolah, nyatakan empat proses yang boleh dilakukan.", jenis: "list", skema: ["Daftar buku baru", "Cari buku", "Pinjam buku", "Pulang buku"], markahSetiap: 1, jumlahMarkah: 4, topik: "Sistem" },
+                        { id: "B3", soalan: "Nyatakan empat jenis struktur kawalan dalam pengaturcaraan.", jenis: "list", skema: ["Urutan (Sequence)", "Pemilihan (Selection)", "Ulangan (Iteration)", "Fungsi (Function)"], markahSetiap: 1, jumlahMarkah: 4, topik: "Pengaturcaraan" },
+                        { id: "B4", soalan: "Nyatakan empat langkah untuk melindungi komputer dari virus.", jenis: "list", skema: ["Pasang antivirus", "Kemas kini sistem", "Jangan buka fail mencurigakan", "Backup data"], markahSetiap: 1, jumlahMarkah: 4, topik: "Keselamatan" },
+                        { id: "B5", soalan: "Nyatakan empat kelebihan menggunakan cloud storage.", jenis: "list", skema: ["Akses dari mana-mana", "Backup automatik", "Jimat ruang storan", "Kongsi fail mudah"], markahSetiap: 1, jumlahMarkah: 4, topik: "Teknologi" }
+                    ],
+                    bahagianC: {
+                        id: "C1", soalan: "Rajah 3 menunjukkan model IPO bagi sistem ATM bank.", diagram: { input: ["Kad ATM", "PIN", "Jumlah wang"], proses: ["1. Sahkan kad dan PIN", "2. Semak baki akaun", "3. Proses transaksi", "4. Kemas kini baki"], output: ["Resit", "Wang tunai", "Baki terkini"] },
+                        subSoalan: [
+                            { id: "C1a", soalan: "Nyatakan tiga jenis data input.", skema: ["Kad ATM", "PIN", "Jumlah wang"], markah: 3 },
+                            { id: "C1b", soalan: "Terangkan empat langkah proses.", skema: ["Sahkan kad dan PIN", "Semak baki akaun", "Proses transaksi", "Kemas kini baki"], markah: 4 },
+                            { id: "C1c", soalan: "Nyatakan tiga output.", skema: ["Resit", "Wang tunai", "Baki terkini"], markah: 3 }
+                        ], jumlahMarkah: 10, topik: "IPO"
+                    }
+                },
+                
+                set3: {
+                    title: "Ujian 3",
+                    bahagianA: [
+                        { id: "A1", soalan: "Sistem pengoperasian berikut adalah sistem operasi mudah alih KECUALI ___________.", pilihan: ["Android", "iOS", "Windows Phone", "Linux Ubuntu"], jawapan: 3, markah: 1, topik: "Sistem Pengoperasian" },
+                        { id: "A2", soalan: "URL adalah singkatan untuk ___________.", pilihan: ["Uniform Resource Locator", "Universal Resource Link", "Unique Resource Locator", "United Resource Link"], jawapan: 0, markah: 1, topik: "Internet" },
+                        { id: "A3", soalan: "Kelajuan internet diukur dalam unit ___________.", pilihan: ["Hz", "Mbps", "GB", "MHz"], jawapan: 1, markah: 1, topik: "Rangkaian" },
+                        { id: "A4", soalan: "SSD lebih pantas daripada HDD kerana ___________.", pilihan: ["lebih besar", "tiada bahagian bergerak", "lebih murah", "lebih berat"], jawapan: 1, markah: 1, topik: "Perkakasan" },
+                        { id: "A5", soalan: "Open source software bermaksud ___________.", pilihan: ["percuma sahaja", "kod sumber terbuka", "tanpa lesen", "hanya untuk pelajar"], jawapan: 1, markah: 1, topik: "Perisian" },
+                        { id: "A6", soalan: "Booting adalah proses ___________.", pilihan: ["mematikan komputer", "memulakan komputer", "mengemas kini sistem", "membuang virus"], jawapan: 1, markah: 1, topik: "Sistem Pengoperasian" },
+                        { id: "A7", soalan: "Cookie dalam pelayar web digunakan untuk ___________.", pilihan: ["menyimpan maklumat pengguna", "mempercepatkan internet", "melindungi virus", "mencetak halaman"], jawapan: 0, markah: 1, topik: "Internet" },
+                        { id: "A8", soalan: "Resolusi 1920x1080 dipanggil ___________.", pilihan: ["HD", "Full HD", "4K", "8K"], jawapan: 1, markah: 1, topik: "Multimedia" },
+                        { id: "A9", soalan: "VPN digunakan untuk ___________.", pilihan: ["main games", "keselamatan rangkaian", "edit video", "muat turun fail"], jawapan: 1, markah: 1, topik: "Keselamatan" },
+                        { id: "A10", soalan: "SQL adalah bahasa untuk ___________.", pilihan: ["membuat website", "mengurus pangkalan data", "edit gambar", "buat animasi"], jawapan: 1, markah: 1, topik: "Pangkalan Data" }
+                    ],
+                    bahagianB: [
+                        { id: "B1", soalan: "Nyatakan definisi CPU dan GPU serta berikan satu fungsi utama untuk setiapnya.", jenis: "jadual", bahagian: [
+                            { label: "CPU - Definisi", skema: "Unit pemproses pusat komputer", markah: 1 },
+                            { label: "CPU - Fungsi", skema: "Memproses arahan dan mengawal operasi", markah: 1 },
+                            { label: "GPU - Definisi", skema: "Unit pemproses grafik", markah: 1 },
+                            { label: "GPU - Fungsi", skema: "Memproses grafik dan video", markah: 1 }
+                        ], jumlahMarkah: 4, topik: "Perkakasan" },
+                        { id: "B2", soalan: "Dalam sistem e-learning, nyatakan empat fungsi utama.", jenis: "list", skema: ["Upload bahan pembelajaran", "Hantar tugasan", "Forum perbincangan", "Kuiz dalam talian"], markahSetiap: 1, jumlahMarkah: 4, topik: "Sistem" },
+                        { id: "B3", soalan: "Nyatakan empat jenis ancaman keselamatan siber.", jenis: "list", skema: ["Virus", "Malware", "Phishing", "Ransomware"], markahSetiap: 1, jumlahMarkah: 4, topik: "Keselamatan" },
+                        { id: "B4", soalan: "Nyatakan empat kelebihan pangkalan data berbanding fail rata.", jenis: "list", skema: ["Kurang pertindihan data", "Integriti data terjaga", "Keselamatan lebih baik", "Akses pantas"], markahSetiap: 1, jumlahMarkah: 4, topik: "Pangkalan Data" },
+                        { id: "B5", soalan: "Nyatakan empat etika penggunaan internet.", jenis: "list", skema: ["Hormati privasi orang lain", "Jangan sebar berita palsu", "Elak cyberbullying", "Hormati hak cipta"], markahSetiap: 1, jumlahMarkah: 4, topik: "Etika" }
+                    ],
+                    bahagianC: {
+                        id: "C1", soalan: "Rajah 3 menunjukkan model IPO bagi sistem pembelian dalam talian.", diagram: { input: ["Maklumat pelanggan", "Produk dipilih", "Kaedah bayaran"], proses: ["1. Proses pesanan", "2. Kira jumlah", "3. Sahkan bayaran", "4. Hantar pesanan"], output: ["Invoice", "Tracking number", "Confirmation email"] },
+                        subSoalan: [
+                            { id: "C1a", soalan: "Nyatakan tiga jenis data input.", skema: ["Maklumat pelanggan", "Produk dipilih", "Kaedah bayaran"], markah: 3 },
+                            { id: "C1b", soalan: "Terangkan empat langkah proses.", skema: ["Proses pesanan", "Kira jumlah", "Sahkan bayaran", "Hantar pesanan"], markah: 4 },
+                            { id: "C1c", soalan: "Nyatakan tiga output.", skema: ["Invoice", "Tracking number", "Confirmation email"], markah: 3 }
+                        ], jumlahMarkah: 10, topik: "IPO"
+                    }
+                },
+                
+                set4: {
+                    title: "Ujian 4",
+                    bahagianA: [
+                        { id: "A1", soalan: "BIOS singkatan untuk ___________.", pilihan: ["Basic Input Output System", "Binary Input Output System", "Basic Integrated Operating System", "Binary Integrated Output System"], jawapan: 0, markah: 1, topik: "Sistem Pengoperasian" },
+                        { id: "A2", soalan: "Domain .edu digunakan untuk ___________.", pilihan: ["kerajaan", "pendidikan", "komersial", "organisasi"], jawapan: 1, markah: 1, topik: "Internet" },
+                        { id: "A3", soalan: "IPv6 diperkenalkan kerana ___________.", pilihan: ["lebih laju", "alamat IPv4 hampir habis", "lebih selamat", "lebih murah"], jawapan: 1, markah: 1, topik: "Rangkaian" },
+                        { id: "A4", soalan: "Cache memory terletak ___________.", pilihan: ["dalam CPU", "dalam RAM", "dalam hard disk", "dalam motherboard"], jawapan: 0, markah: 1, topik: "Perkakasan" },
+                        { id: "A5", soalan: "Freeware bermaksud perisian ___________.", pilihan: ["percuma tetapi berhak cipta", "percuma tanpa had", "bayar sekali", "sewa bulanan"], jawapan: 0, markah: 1, topik: "Perisian" },
+                        { id: "A6", soalan: "Virtual memory menggunakan ___________.", pilihan: ["RAM", "hard disk", "cache", "ROM"], jawapan: 1, markah: 1, topik: "Sistem Pengoperasian" },
+                        { id: "A7", soalan: "Bandwidth merujuk kepada ___________.", pilihan: ["kelajuan pemprosesan", "kapasiti pemindahan data", "saiz fail", "jenis rangkaian"], jawapan: 1, markah: 1, topik: "Rangkaian" },
+                        { id: "A8", soalan: "GIF format sesuai untuk ___________.", pilihan: ["animasi mudah", "video HD", "audio", "dokumen"], jawapan: 0, markah: 1, topik: "Multimedia" },
+                        { id: "A9", soalan: "Encryption digunakan untuk ___________.", pilihan: ["memampatkan fail", "melindungi data", "mempercepatkan internet", "mencetak dokumen"], jawapan: 1, markah: 1, topik: "Keselamatan" },
+                        { id: "A10", soalan: "Foreign key dalam pangkalan data digunakan untuk ___________.", pilihan: ["mencari data", "menghubungkan jadual", "memadam rekod", "mencetak laporan"], jawapan: 1, markah: 1, topik: "Pangkalan Data" }
+                    ],
+                    bahagianB: [
+                        { id: "B1", soalan: "Nyatakan definisi komputer analog dan digital serta berikan satu contoh untuk setiapnya.", jenis: "jadual", bahagian: [
+                            { label: "Analog - Definisi", skema: "Komputer yang memproses data berterusan", markah: 1 },
+                            { label: "Analog - Contoh", skema: "Termometer analog, speedometer", markah: 1 },
+                            { label: "Digital - Definisi", skema: "Komputer yang memproses data diskrit", markah: 1 },
+                            { label: "Digital - Contoh", skema: "PC, smartphone, kalkulator", markah: 1 }
+                        ], jumlahMarkah: 4, topik: "Asas Komputer" },
+                        { id: "B2", soalan: "Dalam sistem pengurusan hospital, nyatakan empat modul utama.", jenis: "list", skema: ["Pendaftaran pesakit", "Rekod perubatan", "Pengurusan bilik", "Sistem billing"], markahSetiap: 1, jumlahMarkah: 4, topik: "Sistem" },
+                        { id: "B3", soalan: "Nyatakan empat generasi bahasa pengaturcaraan.", jenis: "list", skema: ["Bahasa mesin", "Bahasa himpunan", "Bahasa peringkat tinggi", "Bahasa generasi keempat"], markahSetiap: 1, jumlahMarkah: 4, topik: "Pengaturcaraan" },
+                        { id: "B4", soalan: "Nyatakan empat jenis backup data.", jenis: "list", skema: ["Full backup", "Incremental backup", "Differential backup", "Cloud backup"], markahSetiap: 1, jumlahMarkah: 4, topik: "Pengurusan Data" },
+                        { id: "B5", soalan: "Nyatakan empat perkara penting dalam rekabentuk antara muka pengguna.", jenis: "list", skema: ["Mudah digunakan", "Konsisten", "Maklum balas jelas", "Estetik menarik"], markahSetiap: 1, jumlahMarkah: 4, topik: "Reka Bentuk" }
+                    ],
+                    bahagianC: {
+                        id: "C1", soalan: "Rajah 3 menunjukkan model IPO bagi sistem kawalan lampu automatik.", diagram: { input: ["Sensor cahaya", "Timer", "Manual switch"], proses: ["1. Baca input sensor", "2. Bandingkan dengan tetapan", "3. Tentukan tindakan", "4. Hantar arahan"], output: ["Status lampu", "Waktu operasi", "Penggunaan elektrik"] },
+                        subSoalan: [
+                            { id: "C1a", soalan: "Nyatakan tiga jenis data input.", skema: ["Sensor cahaya", "Timer", "Manual switch"], markah: 3 },
+                            { id: "C1b", soalan: "Terangkan empat langkah proses.", skema: ["Baca input sensor", "Bandingkan dengan tetapan", "Tentukan tindakan", "Hantar arahan"], markah: 4 },
+                            { id: "C1c", soalan: "Nyatakan tiga output.", skema: ["Status lampu", "Waktu operasi", "Penggunaan elektrik"], markah: 3 }
+                        ], jumlahMarkah: 10, topik: "IPO"
+                    }
+                },
+                
+                set5: {
+                    title: "Ujian 5",
+                    bahagianA: [
+                        { id: "A1", soalan: "Defragmentasi cakera keras berfungsi untuk ___________.", pilihan: ["membuang virus", "menyusun semula fail supaya lebih teratur", "menambah kapasiti storan", "memasang perisian baru"], jawapan: 1, markah: 1, topik: "Sistem Pengoperasian" },
+                        { id: "A2", soalan: "JavaScript digunakan untuk ___________.", pilihan: ["mencipta interaktiviti laman web", "melindungi komputer", "mencetak dokumen", "menyimpan fail"], jawapan: 0, markah: 1, topik: "Teknologi Web" },
+                        { id: "A3", soalan: "Antara berikut yang manakah adalah alamat IP yang sah?", pilihan: ["192.168.1.256", "192.168.1.1", "192.168.500.1", "192.256.1.1"], jawapan: 1, markah: 1, topik: "Rangkaian" },
+                        { id: "A4", soalan: "Perisian anti-virus berfungsi untuk ___________.", pilihan: ["mempercepatkan internet", "mengesan dan membuang perisian hasad", "mencipta sandaran data", "menguruskan fail"], jawapan: 1, markah: 1, topik: "Keselamatan" },
+                        { id: "A5", soalan: "Topologi rangkaian yang mempunyai satu nod pusat adalah ___________.", pilihan: ["Topologi bus", "Topologi bintang", "Topologi cincin", "Topologi mesh"], jawapan: 1, markah: 1, topik: "Rangkaian" },
+                        { id: "A6", soalan: "Perisian hamparan elektronik digunakan untuk ___________.", pilihan: ["menulis surat", "mengira dan menganalisis data", "membuat pembentangan", "melukis gambar"], jawapan: 1, markah: 1, topik: "Perisian" },
+                        { id: "A7", soalan: "Kata laluan yang kuat perlu mengandungi ___________.", pilihan: ["nama sahaja", "nombor sahaja", "gabungan huruf, nombor dan simbol", "tarikh lahir"], jawapan: 2, markah: 1, topik: "Keselamatan" },
+                        { id: "A8", soalan: "FTP adalah singkatan untuk ___________.", pilihan: ["File Transfer Protocol", "Fast Text Program", "File Testing Process", "Free Transfer Protocol"], jawapan: 0, markah: 1, topik: "Internet" },
+                        { id: "A9", soalan: "Format fail yang digunakan untuk dokumen yang tidak boleh diedit dengan mudah adalah ___________.", pilihan: ["DOCX", "TXT", "PDF", "RTF"], jawapan: 2, markah: 1, topik: "Fail" },
+                        { id: "A10", soalan: "Pertanyaan (query) dalam pangkalan data digunakan untuk ___________.", pilihan: ["memadam jadual", "mencari maklumat tertentu", "mencipta borang", "mengubah struktur jadual"], jawapan: 1, markah: 1, topik: "Pangkalan Data" }
+                    ],
+                    bahagianB: [
+                        { id: "B1", soalan: "Nyatakan definisi LAN dan WAN serta berikan satu contoh penggunaan untuk setiapnya.", jenis: "jadual", bahagian: [
+                            { label: "LAN - Definisi", skema: "Rangkaian komputer dalam kawasan terhad seperti rumah atau pejabat", markah: 1 },
+                            { label: "LAN - Contoh", skema: "Rangkaian komputer dalam makmal sekolah", markah: 1 },
+                            { label: "WAN - Definisi", skema: "Rangkaian komputer yang meliputi kawasan geografi yang luas", markah: 1 },
+                            { label: "WAN - Contoh", skema: "Internet", markah: 1 }
+                        ], jumlahMarkah: 4, topik: "Rangkaian" },
+                        { id: "B2", soalan: "Dalam sistem pengurusan inventori kedai, nyatakan empat bahagian kecil yang boleh dihasilkan melalui leraian masalah.", jenis: "list", skema: ["Pendaftaran produk", "Pengemaskinian stok", "Laporan jualan", "Amaran stok rendah"], markahSetiap: 1, jumlahMarkah: 4, topik: "Penyelesaian Masalah" },
+                        { id: "B3", soalan: "Nyatakan empat sebab mengapa dokumentasi program adalah penting.", jenis: "list", skema: ["Memudahkan pemahaman program", "Membantu penyelenggaraan program", "Memudahkan orang lain menggunakan program", "Rujukan untuk pembangunan masa depan"], markahSetiap: 1, jumlahMarkah: 4, topik: "Pengaturcaraan" },
+                        { id: "B4", soalan: "Jadual pangkalan data hospital menyimpan maklumat pesakit. Nyatakan empat kegunaan pangkalan data ini kepada pihak hospital.", jenis: "list", skema: ["Menyimpan rekod perubatan pesakit", "Memudahkan capaian maklumat pesakit", "Menjejak sejarah rawatan", "Menjana laporan statistik kesihatan"], markahSetiap: 1, jumlahMarkah: 4, topik: "Pangkalan Data" },
+                        { id: "B5", soalan: "Anda menerima e-mel yang kelihatan seperti dari bank anda. Nyatakan empat cara untuk mengenalpasti sama ada e-mel ini adalah penipuan phishing.", jenis: "list", skema: ["Semak alamat e-mel pengirim dengan teliti", "Cari kesilapan ejaan dan tatabahasa", "Jangan klik pautan, taip URL bank secara manual", "Hubungi bank untuk pengesahan"], markahSetiap: 1, jumlahMarkah: 4, topik: "Keselamatan" }
+                    ],
+                    bahagianC: {
+                        id: "C1", soalan: "Rajah 3 menunjukkan model Input–Proses–Output (IPO) bagi sistem pengurusan inventori kedai.", diagram: { input: ["Kod Produk", "Nama Produk", "Kuantiti dijual"], proses: ["1. Semak stok semasa", "2. Kira jumlah barang", "3. Kemaskini stok", "4. Jana amaran stok rendah"], output: ["Status stok", "Laporan jualan", "Amaran stok rendah"] },
+                        subSoalan: [
+                            { id: "C1a", soalan: "Berdasarkan Rajah 3, nyatakan tiga jenis data input yang diperlukan oleh sistem.", skema: ["Kod produk", "Nama produk", "Kuantiti dijual"], markah: 3 },
+                            { id: "C1b", soalan: "Terangkan empat langkah proses yang berlaku untuk menghasilkan pengurusan inventori.", skema: ["Sistem semak stok semasa produk", "Sistem kira jumlah barang yang tinggal", "Sistem kemaskini stok selepas jualan", "Sistem jana amaran jika stok rendah"], markah: 4 },
+                            { id: "C1c", soalan: "Nyatakan tiga output yang dihasilkan oleh sistem tersebut.", skema: ["Status stok terkini", "Laporan jualan", "Amaran stok rendah"], markah: 3 }
+                        ], jumlahMarkah: 10, topik: "IPO"
+                    }
+                }
+            }
+        };
+        
+        // ============================================
+        // MARKING SYSTEM - Embedded from marking.js
+        // ============================================
+        class MarkingSystem {
+            constructor() {
+                this.PASSWORD = "AzizSmart";
+                this.MAX_ATTEMPTS = 3;
+                this.LOCKOUT_DURATION = 300000; // 5 minutes
+                this.SESSION_DURATION = 3600000; // 1 hour
+                
+                this.failedAttempts = parseInt(localStorage.getItem('marking_failed_attempts') || '0');
+                this.lockoutUntil = parseInt(localStorage.getItem('marking_lockout_until') || '0');
+            }
+            
+            verifyPassword(password) {
+                if (this.isLocked()) {
+                    const remaining = Math.ceil((this.lockoutUntil - Date.now()) / 60000);
+                    return {
+                        success: false,
+                        locked: true,
+                        message: `Dikunci. Cuba lagi dalam ${remaining} minit.`
+                    };
+                }
+                
+                if (password === this.PASSWORD) {
+                    this.grantAccess();
+                    return {
+                        success: true,
+                        message: 'Akses diterima!'
+                    };
+                }
+                
+                this.failedAttempts++;
+                localStorage.setItem('marking_failed_attempts', this.failedAttempts);
+                
+                if (this.failedAttempts >= this.MAX_ATTEMPTS) {
+                    this.lockoutUntil = Date.now() + this.LOCKOUT_DURATION;
+                    localStorage.setItem('marking_lockout_until', this.lockoutUntil);
+                    return {
+                        success: false,
+                        locked: true,
+                        message: '3 percubaan salah. Dikunci selama 5 minit.'
+                    };
+                }
+                
+                return {
+                    success: false,
+                    locked: false,
+                    message: `Kata laluan salah. Percubaan: ${this.failedAttempts}/${this.MAX_ATTEMPTS}`
+                };
+            }
+            
+            grantAccess() {
+                this.failedAttempts = 0;
+                localStorage.setItem('marking_failed_attempts', '0');
+                sessionStorage.setItem('marking_access', 'granted');
+                sessionStorage.setItem('marking_access_expires', Date.now() + this.SESSION_DURATION);
+            }
+            
+            isLocked() {
+                if (this.lockoutUntil && Date.now() < this.lockoutUntil) {
+                    return true;
+                }
+                if (this.lockoutUntil && Date.now() >= this.lockoutUntil) {
+                    this.lockoutUntil = 0;
+                    this.failedAttempts = 0;
+                    localStorage.setItem('marking_lockout_until', '0');
+                    localStorage.setItem('marking_failed_attempts', '0');
+                }
+                return false;
+            }
+            
+            hasValidSession() {
+                const access = sessionStorage.getItem('marking_access');
+                const expires = parseInt(sessionStorage.getItem('marking_access_expires') || '0');
+                
+                if (access === 'granted' && Date.now() < expires) {
+                    return true;
+                }
+                
+                if (access === 'granted' && Date.now() >= expires) {
+                    this.logout();
+                }
+                
+                return false;
+            }
+            
+            logout() {
+                sessionStorage.removeItem('marking_access');
+                sessionStorage.removeItem('marking_access_expires');
+            }
+            
+            markBahagianA(answers, correctAnswers) {
+                let score = 0;
+                const results = {};
+                
+                correctAnswers.forEach((question, index) => {
+                    const questionId = question.id;
+                    const userAnswer = answers[questionId];
+                    const correct = userAnswer === question.jawapan;
+                    
+                    results[questionId] = {
+                        correct: correct,
+                        userAnswer: userAnswer,
+                        correctAnswer: question.jawapan,
+                        marks: correct ? 1 : 0
+                    };
+                    
+                    if (correct) score++;
+                });
+                
+                return {
+                    score: score,
+                    total: correctAnswers.length,
+                    percentage: (score / correctAnswers.length) * 100,
+                    results: results
+                };
+            }
+            
+            calculatePointer(percentage) {
+                if (percentage >= 90) return 4.00;
+                if (percentage >= 80) return 3.67;
+                if (percentage >= 75) return 3.33;
+                if (percentage >= 70) return 3.00;
+                if (percentage >= 65) return 2.67;
+                if (percentage >= 60) return 2.33;
+                if (percentage >= 55) return 2.00;
+                if (percentage >= 50) return 1.67;
+                if (percentage >= 45) return 1.33;
+                if (percentage >= 40) return 1.00;
+                return 0.00;
+            }
+            
+            calculateGrade(percentage) {
+                if (percentage >= 90) return 'A+';
+                if (percentage >= 80) return 'A';
+                if (percentage >= 75) return 'A-';
+                if (percentage >= 70) return 'B+';
+                if (percentage >= 65) return 'B';
+                if (percentage >= 60) return 'C+';
+                if (percentage >= 55) return 'C';
+                if (percentage >= 50) return 'D+';
+                if (percentage >= 45) return 'D';
+                if (percentage >= 40) return 'E';
+                return 'F';
+            }
+            
+            getStatus(percentage) {
+                if (percentage >= 90) return '🎯 Cemerlang';
+                if (percentage >= 80) return '🌟 Kepujian';
+                if (percentage >= 70) return '✓ Baik';
+                if (percentage >= 60) return '👍 Memuaskan';
+                if (percentage >= 50) return '📚 Sederhana';
+                if (percentage >= 40) return '⚠️ Lulus';
+                return '❌ Gagal';
+            }
+        }
+
+        const markingSystem = new MarkingSystem();
+
+        // ============================================
+        // STORAGE SYSTEM (IndexedDB)
+        // ============================================
+        class ExamStorage {
+            constructor() {
+                this.dbName = 'ExamSystemDB';
+                this.version = 1;
+                this.db = null;
+            }
+            
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve();
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // Create object stores
+                        if (!db.objectStoreNames.contains('submissions')) {
+                            db.createObjectStore('submissions', { keyPath: 'id', autoIncrement: true });
+                        }
+                        if (!db.objectStoreNames.contains('progress')) {
+                            db.createObjectStore('progress', { keyPath: 'id' });
+                        }
+                        if (!db.objectStoreNames.contains('bookmarks')) {
+                            db.createObjectStore('bookmarks', { keyPath: 'id' });
+                        }
+                    };
+                });
+            }
+            
+            async saveSubmission(data) {
+                const transaction = this.db.transaction(['submissions'], 'readwrite');
+                const store = transaction.objectStore('submissions');
+                return store.add(data);
+            }
+            
+            async getAllSubmissions() {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['submissions'], 'readonly');
+                    const store = transaction.objectStore('submissions');
+                    const request = store.getAll();
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async updateSubmission(id, data) {
+                const transaction = this.db.transaction(['submissions'], 'readwrite');
+                const store = transaction.objectStore('submissions');
+                return store.put({ ...data, id });
+            }
+            
+            async saveProgress(examId, data) {
+                const transaction = this.db.transaction(['progress'], 'readwrite');
+                const store = transaction.objectStore('progress');
+                return store.put({ id: examId, ...data });
+            }
+            
+            async getProgress(examId) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['progress'], 'readonly');
+                    const store = transaction.objectStore('progress');
+                    const request = store.get(examId);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async deleteProgress(examId) {
+                const transaction = this.db.transaction(['progress'], 'readwrite');
+                const store = transaction.objectStore('progress');
+                return store.delete(examId);
+            }
+        }
+
+        const storage = new ExamStorage();
+
+        // ============================================
+        // EXAM STATE MANAGEMENT
+        // ============================================
+        let currentExam = {
+            set: null,
+            setData: null,
+            studentInfo: {},
+            answers: {},
+            bookmarks: new Set(),
+            currentSection: 'A',
+            currentQuestionIndex: 0,
+            startTime: null,
+            remainingTime: 3600,
+            isPaused: false,
+            timerInterval: null
+        };
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await storage.init();
+            renderSetGrid();
+            loadAnalytics();
+        });
+
+        // ============================================
+        // PAGE NAVIGATION
+        // ============================================
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            const pageMap = {
+                'home': 'homePage',
+                'exam': 'examPage',
+                'teacher': 'teacherPage',
+                'analytics': 'analyticsPage',
+                'results': 'resultsPage'
+            };
+            
+            const pageElement = document.getElementById(pageMap[pageName]);
+            if (pageElement) {
+                pageElement.classList.add('active');
+                
+                // Load page-specific data
+                if (pageName === 'teacher') {
+                    loadTeacherMode();
+                } else if (pageName === 'analytics') {
+                    loadAnalytics();
+                }
+            }
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // ============================================
+        // SET SELECTION
+        // ============================================
+        function renderSetGrid() {
+            const grid = document.getElementById('setGrid');
+            const sets = Object.keys(EXAM_DATA.sets);
+            
+            grid.innerHTML = sets.map((setKey, index) => {
+                const setData = EXAM_DATA.sets[setKey];
+                const setNumber = index + 1;
+                const isCompleted = false; // Check from storage
+                
+                return `
+                    <div class="set-card ${isCompleted ? 'completed' : ''}" onclick="selectSet('${setKey}')">
+                        <div class="set-number">${setNumber}</div>
+                        <h3>${setData.title}</h3>
+                        <div class="set-info">
+                            <div class="set-info-item">
+                                <span>⏱️</span>
+                                <span>60 minit</span>
+                            </div>
+                            <div class="set-info-item">
+                                <span>📝</span>
+                                <span>40 markah</span>
+                            </div>
+                        </div>
+                        ${isCompleted ? '<span class="badge badge-success">✓ Selesai</span>' : '<span class="badge badge-warning">Belum Mula</span>'}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectSet(setKey) {
+            currentExam.set = setKey;
+            currentExam.setData = EXAM_DATA.sets[setKey];
+            showModal('studentInfoModal');
+        }
+
+        function startExam() {
+            const name = document.getElementById('studentName').value.trim();
+            const ic = document.getElementById('studentIC').value.trim();
+            const studentClass = document.getElementById('studentClass').value.trim();
+            
+            if (!name || !ic || !studentClass) {
+                alert('Sila lengkapkan semua maklumat!');
+                return;
+            }
+            
+            currentExam.studentInfo = { name, ic, class: studentClass };
+            currentExam.startTime = Date.now();
+            currentExam.answers = {};
+            currentExam.bookmarks = new Set();
+            currentExam.currentSection = 'A';
+            currentExam.currentQuestionIndex = 0;
+            currentExam.remainingTime = 3600;
+            currentExam.isPaused = false;
+            
+            closeModal('studentInfoModal');
+            showPage('exam');
+            initializeExam();
+            startTimer();
+        }
+
+        // ============================================
+        // EXAM INTERFACE
+        // ============================================
+        function initializeExam() {
+            document.getElementById('currentSet').textContent = currentExam.setData.title;
+            renderQuestionNavigation();
+            updateSectionTabs();
+            displayQuestion();
+        }
+
+        function renderQuestionNavigation() {
+            const navGrid = document.getElementById('questionNav');
+            const totalQuestions = currentExam.setData.bahagianA.length + 
+                                   currentExam.setData.bahagianB.length + 1; // +1 for Bahagian C
+            
+            let html = '';
+            
+            // Bahagian A
+            for (let i = 0; i < currentExam.setData.bahagianA.length; i++) {
+                const questionId = currentExam.setData.bahagianA[i].id;
+                const isAnswered = currentExam.answers[questionId] !== undefined;
+                const isBookmarked = currentExam.bookmarks.has(questionId);
+                const isActive = currentExam.currentSection === 'A' && currentExam.currentQuestionIndex === i;
+                
+                html += `<button class="nav-btn ${isAnswered ? 'answered' : ''} ${isBookmarked ? 'bookmarked' : ''} ${isActive ? 'active' : ''}" 
+                         onclick="jumpToQuestion('A', ${i})">A${i+1}</button>`;
+            }
+            
+            // Bahagian B
+            for (let i = 0; i < currentExam.setData.bahagianB.length; i++) {
+                const questionId = currentExam.setData.bahagianB[i].id;
+                const isAnswered = currentExam.answers[questionId] !== undefined;
+                const isBookmarked = currentExam.bookmarks.has(questionId);
+                const isActive = currentExam.currentSection === 'B' && currentExam.currentQuestionIndex === i;
+                
+                html += `<button class="nav-btn ${isAnswered ? 'answered' : ''} ${isBookmarked ? 'bookmarked' : ''} ${isActive ? 'active' : ''}" 
+                         onclick="jumpToQuestion('B', ${i})">B${i+1}</button>`;
+            }
+            
+            // Bahagian C
+            const cQuestionId = currentExam.setData.bahagianC.id;
+            const isCAnswered = currentExam.answers[cQuestionId] !== undefined;
+            const isCBookmarked = currentExam.bookmarks.has(cQuestionId);
+            const isCActive = currentExam.currentSection === 'C';
+            
+            html += `<button class="nav-btn ${isCAnswered ? 'answered' : ''} ${isCBookmarked ? 'bookmarked' : ''} ${isCActive ? 'active' : ''}" 
+                     onclick="jumpToQuestion('C', 0)">C1</button>`;
+            
+            navGrid.innerHTML = html;
+        }
+
+        function jumpToQuestion(section, index) {
+            currentExam.currentSection = section;
+            currentExam.currentQuestionIndex = index;
+            displayQuestion();
+            renderQuestionNavigation();
+            updateSectionTabs();
+        }
+        
+        function switchSection(section) {
+            currentExam.currentSection = section;
+            currentExam.currentQuestionIndex = 0;
+            displayQuestion();
+            renderQuestionNavigation();
+            updateSectionTabs();
+        }
+        
+        function updateSectionTabs() {
+            const tabs = document.querySelectorAll('.section-tab');
+            tabs.forEach((tab, index) => {
+                const sections = ['A', 'B', 'C'];
+                if (sections[index] === currentExam.currentSection) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        function displayQuestion() {
+            const container = document.getElementById('questionDisplay');
+            const section = currentExam.currentSection;
+            const index = currentExam.currentQuestionIndex;
+            
+            let questionData;
+            let questionHTML = '';
+            
+            // Update current section display
+            document.getElementById('currentSection').textContent = `Bahagian ${section}`;
+            
+            if (section === 'A') {
+                questionData = currentExam.setData.bahagianA[index];
+                document.getElementById('currentQuestion').textContent = `${index + 1} / ${currentExam.setData.bahagianA.length}`;
+                
+                questionHTML = `
+                    <div class="section-title">Bahagian A - Aneka Pilihan (${questionData.markah} markah)</div>
+                    
+                    <div class="question-header">
+                        <div class="question-number">Soalan ${index + 1}</div>
+                        <button class="bookmark-btn" onclick="toggleBookmark('${questionData.id}')">
+                            ${currentExam.bookmarks.has(questionData.id) ? '🔖' : '📌'}
+                        </button>
+                    </div>
+                    
+                    <div class="question-text">${questionData.soalan}</div>
+                    
+                    <div class="options">
+                        ${questionData.pilihan.map((option, i) => `
+                            <div class="option ${currentExam.answers[questionData.id] === i ? 'selected' : ''}" 
+                                 onclick="selectOption('${questionData.id}', ${i})">
+                                <input type="radio" name="${questionData.id}" 
+                                       ${currentExam.answers[questionData.id] === i ? 'checked' : ''}>
+                                <div class="option-label">${String.fromCharCode(65 + i)}. ${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (section === 'B') {
+                questionData = currentExam.setData.bahagianB[index];
+                document.getElementById('currentQuestion').textContent = `${index + 1} / ${currentExam.setData.bahagianB.length}`;
+                
+                questionHTML = `
+                    <div class="section-title">Bahagian B - Soalan Pendek (${questionData.jumlahMarkah} markah)</div>
+                    
+                    <div class="question-header">
+                        <div class="question-number">Soalan ${index + 1}</div>
+                        <button class="bookmark-btn" onclick="toggleBookmark('${questionData.id}')">
+                            ${currentExam.bookmarks.has(questionData.id) ? '🔖' : '📌'}
+                        </button>
+                    </div>
+                    
+                    <div class="question-text">${questionData.soalan}</div>
+                    
+                    <div class="answer-section">
+                        <div class="answer-modes">
+                            <button class="mode-btn active" onclick="switchAnswerMode('type')">⌨️ Taip</button>
+                            <button class="mode-btn" onclick="switchAnswerMode('write')">✍️ Tulis</button>
+                        </div>
+                        
+                        <div id="typeMode" class="answer-mode">
+                            <textarea class="answer-input" id="answer_${questionData.id}" 
+                                      placeholder="Tulis jawapan anda di sini...">${currentExam.answers[questionData.id] || ''}</textarea>
+                        </div>
+                        
+                        <div id="writeMode" class="answer-mode hidden">
+                            <div class="canvas-container">
+                                <div class="canvas-tools">
+                                    <button class="tool-btn active" onclick="setCanvasTool('pen')">✏️ Pen</button>
+                                    <button class="tool-btn" onclick="setCanvasTool('eraser')">🧹 Eraser</button>
+                                    <button class="tool-btn" onclick="clearCanvas()">🗑️ Clear</button>
+                                    <input type="color" id="penColor" value="#000000">
+                                </div>
+                                <canvas id="writingCanvas" width="800" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'C') {
+                questionData = currentExam.setData.bahagianC;
+                document.getElementById('currentQuestion').textContent = '1 / 1';
+                
+                questionHTML = `
+                    <div class="section-title">Bahagian C - Esei (${questionData.jumlahMarkah} markah)</div>
+                    
+                    <div class="question-header">
+                        <div class="question-number">Soalan 1</div>
+                        <button class="bookmark-btn" onclick="toggleBookmark('${questionData.id}')">
+                            ${currentExam.bookmarks.has(questionData.id) ? '🔖' : '📌'}
+                        </button>
+                    </div>
+                    
+                    <div class="question-text">${questionData.soalan}</div>
+                    
+                    ${questionData.subSoalan.map((sub, i) => `
+                        <div class="card mb-md">
+                            <h4>${String.fromCharCode(97 + i)}) ${sub.soalan} (${sub.markah} markah)</h4>
+                            
+                            <div class="answer-section">
+                                <div class="answer-modes">
+                                    <button class="mode-btn active" onclick="switchAnswerMode('type', '${sub.id}')">⌨️ Taip</button>
+                                    <button class="mode-btn" onclick="switchAnswerMode('write', '${sub.id}')">✍️ Tulis</button>
+                                </div>
+                                
+                                <div id="typeMode_${sub.id}" class="answer-mode">
+                                    <textarea class="answer-input" id="answer_${sub.id}" 
+                                              placeholder="Tulis jawapan anda di sini...">${currentExam.answers[sub.id] || ''}</textarea>
+                                </div>
+                                
+                                <div id="writeMode_${sub.id}" class="answer-mode hidden">
+                                    <div class="canvas-container">
+                                        <div class="canvas-tools">
+                                            <button class="tool-btn active" onclick="setCanvasTool('pen', '${sub.id}')">✏️ Pen</button>
+                                            <button class="tool-btn" onclick="setCanvasTool('eraser', '${sub.id}')">🧹 Eraser</button>
+                                            <button class="tool-btn" onclick="clearCanvas('${sub.id}')">🗑️ Clear</button>
+                                            <input type="color" id="penColor_${sub.id}" value="#000000">
+                                        </div>
+                                        <canvas id="writingCanvas_${sub.id}" width="800" height="400"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }
+            
+            container.innerHTML = questionHTML;
+            
+            // Initialize canvas if needed
+            initializeCanvas();
+            
+            // Update navigation buttons
+            updateNavigationButtons();
+        }
+
+        function selectOption(questionId, optionIndex) {
+            currentExam.answers[questionId] = optionIndex;
+            displayQuestion();
+            renderQuestionNavigation();
+            saveProgress();
+        }
+
+        function toggleBookmark(questionId) {
+            if (currentExam.bookmarks.has(questionId)) {
+                currentExam.bookmarks.delete(questionId);
+            } else {
+                currentExam.bookmarks.add(questionId);
+            }
+            displayQuestion();
+            renderQuestionNavigation();
+        }
+
+        function switchAnswerMode(mode, questionId) {
+            const typeMode = document.getElementById(questionId ? `typeMode_${questionId}` : 'typeMode');
+            const writeMode = document.getElementById(questionId ? `writeMode_${questionId}` : 'writeMode');
+            const buttons = document.querySelectorAll('.mode-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'type') {
+                typeMode.classList.remove('hidden');
+                writeMode.classList.add('hidden');
+            } else {
+                typeMode.classList.add('hidden');
+                writeMode.classList.remove('hidden');
+                initializeCanvas(questionId);
+            }
+        }
+
+        // Canvas for writing/drawing
+        let canvasInstances = {};
+
+        function initializeCanvas(questionId) {
+            const canvasId = questionId ? `writingCanvas_${questionId}` : 'writingCanvas';
+            const canvas = document.getElementById(canvasId);
+            
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            // Set canvas size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 400;
+            
+            // Drawing settings
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch support
+            canvas.addEventListener('touchstart', handleTouchStart);
+            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            function startDrawing(e) {
+                isDrawing = true;
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+                // Save canvas data
+                const key = questionId || currentExam.setData.bahagianB[currentExam.currentQuestionIndex].id;
+                currentExam.answers[key] = canvas.toDataURL();
+                saveProgress();
+            }
+            
+            function handleTouchStart(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                isDrawing = true;
+                lastX = touch.clientX - rect.left;
+                lastY = touch.clientY - rect.top;
+            }
+            
+            function handleTouchMove(e) {
+                if (!isDrawing) return;
+                e.preventDefault();
+                
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                
+                [lastX, lastY] = [x, y];
+            }
+            
+            canvasInstances[canvasId] = { canvas, ctx };
+        }
+
+        function setCanvasTool(tool, questionId) {
+            const canvasId = questionId ? `writingCanvas_${questionId}` : 'writingCanvas';
+            const instance = canvasInstances[canvasId];
+            
+            if (!instance) return;
+            
+            const ctx = instance.ctx;
+            const colorInput = document.getElementById(questionId ? `penColor_${questionId}` : 'penColor');
+            
+            if (tool === 'pen') {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = colorInput.value;
+                ctx.lineWidth = 2;
+            } else if (tool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = 20;
+            }
+        }
+
+        function clearCanvas(questionId) {
+            const canvasId = questionId ? `writingCanvas_${questionId}` : 'writingCanvas';
+            const instance = canvasInstances[canvasId];
+            
+            if (!instance) return;
+            
+            const { canvas, ctx } = instance;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            const section = currentExam.currentSection;
+            const index = currentExam.currentQuestionIndex;
+            
+            // Prev button
+            if (section === 'A' && index === 0) {
+                prevBtn.disabled = true;
+            } else {
+                prevBtn.disabled = false;
+            }
+            
+            // Next/Submit button
+            if (section === 'C') {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+        }
+
+        function previousQuestion() {
+            if (currentExam.currentSection === 'A' && currentExam.currentQuestionIndex > 0) {
+                currentExam.currentQuestionIndex--;
+            } else if (currentExam.currentSection === 'B') {
+                if (currentExam.currentQuestionIndex > 0) {
+                    currentExam.currentQuestionIndex--;
+                } else {
+                    currentExam.currentSection = 'A';
+                    currentExam.currentQuestionIndex = currentExam.setData.bahagianA.length - 1;
+                }
+            } else if (currentExam.currentSection === 'C') {
+                currentExam.currentSection = 'B';
+                currentExam.currentQuestionIndex = currentExam.setData.bahagianB.length - 1;
+            }
+            
+            displayQuestion();
+            renderQuestionNavigation();
+            updateSectionTabs();
+        }
+
+        function nextQuestion() {
+            const section = currentExam.currentSection;
+            const index = currentExam.currentQuestionIndex;
+            
+            if (section === 'A') {
+                if (index < currentExam.setData.bahagianA.length - 1) {
+                    currentExam.currentQuestionIndex++;
+                } else {
+                    currentExam.currentSection = 'B';
+                    currentExam.currentQuestionIndex = 0;
+                }
+            } else if (section === 'B') {
+                if (index < currentExam.setData.bahagianB.length - 1) {
+                    currentExam.currentQuestionIndex++;
+                } else {
+                    currentExam.currentSection = 'C';
+                    currentExam.currentQuestionIndex = 0;
+                }
+            }
+            
+            displayQuestion();
+            renderQuestionNavigation();
+            updateSectionTabs();
+        }
+
+        // ============================================
+        // TIMER MANAGEMENT
+        // ============================================
+        function startTimer() {
+            if (currentExam.timerInterval) {
+                clearInterval(currentExam.timerInterval);
+            }
+            
+            currentExam.timerInterval = setInterval(() => {
+                if (currentExam.isPaused) return;
+                
+                currentExam.remainingTime--;
+                updateTimerDisplay();
+                
+                if (currentExam.remainingTime <= 0) {
+                    clearInterval(currentExam.timerInterval);
+                    autoSubmitExam();
+                }
+                
+                // Auto-save progress every 30 seconds
+                if (currentExam.remainingTime % 30 === 0) {
+                    saveProgress();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(currentExam.remainingTime / 60);
+            const seconds = currentExam.remainingTime % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timerElement = document.getElementById('timerDisplay');
+            const timerContainer = document.getElementById('timer');
+            
+            timerElement.textContent = display;
+            
+            // Visual warnings
+            if (currentExam.remainingTime <= 300) { // 5 minutes
+                timerContainer.classList.add('danger');
+                timerContainer.classList.remove('warning');
+            } else if (currentExam.remainingTime <= 600) { // 10 minutes
+                timerContainer.classList.add('warning');
+                timerContainer.classList.remove('danger');
+            } else {
+                timerContainer.classList.remove('warning', 'danger');
+            }
+        }
+
+        function togglePause() {
+            currentExam.isPaused = !currentExam.isPaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            
+            if (currentExam.isPaused) {
+                pauseBtn.innerHTML = '▶️ Sambung';
+                pauseBtn.classList.remove('btn-secondary');
+                pauseBtn.classList.add('btn-success');
+            } else {
+                pauseBtn.innerHTML = '⏸️ Pause';
+                pauseBtn.classList.remove('btn-success');
+                pauseBtn.classList.add('btn-secondary');
+            }
+        }
+
+        // ============================================
+        // EXAM SUBMISSION
+        // ============================================
+        function confirmSubmit() {
+            // Save current answer if in text mode
+            saveCurrentTextAnswer();
+            
+            // Generate submission summary
+            const summary = document.getElementById('submissionSummary');
+            const totalA = currentExam.setData.bahagianA.length;
+            const totalB = currentExam.setData.bahagianB.length;
+            const totalC = currentExam.setData.bahagianC.subSoalan.length;
+            
+            let answeredA = 0;
+            let answeredB = 0;
+            let answeredC = 0;
+            
+            currentExam.setData.bahagianA.forEach(q => {
+                if (currentExam.answers[q.id] !== undefined) answeredA++;
+            });
+            
+            currentExam.setData.bahagianB.forEach(q => {
+                if (currentExam.answers[q.id]) answeredB++;
+            });
+            
+            currentExam.setData.bahagianC.subSoalan.forEach(q => {
+                if (currentExam.answers[q.id]) answeredC++;
+            });
+            
+            summary.innerHTML = `
+                <div class="mb-md">
+                    <strong>Bahagian A:</strong> ${answeredA}/${totalA} dijawab<br>
+                    <strong>Bahagian B:</strong> ${answeredB}/${totalB} dijawab<br>
+                    <strong>Bahagian C:</strong> ${answeredC}/${totalC} dijawab
+                </div>
+            `;
+            
+            showModal('confirmSubmitModal');
+        }
+
+        function saveCurrentTextAnswer() {
+            const section = currentExam.currentSection;
+            
+            if (section === 'A') return; // MCQ already saved
+            
+            if (section === 'B') {
+                const questionData = currentExam.setData.bahagianB[currentExam.currentQuestionIndex];
+                const textarea = document.getElementById(`answer_${questionData.id}`);
+                if (textarea) {
+                    currentExam.answers[questionData.id] = textarea.value;
+                }
+            } else if (section === 'C') {
+                currentExam.setData.bahagianC.subSoalan.forEach(sub => {
+                    const textarea = document.getElementById(`answer_${sub.id}`);
+                    if (textarea) {
+                        currentExam.answers[sub.id] = textarea.value;
+                    }
+                });
+            }
+        }
+
+        async function submitExam() {
+            clearInterval(currentExam.timerInterval);
+            closeModal('confirmSubmitModal');
+            
+            // Prepare submission data
+            const submission = {
+                studentInfo: currentExam.studentInfo,
+                set: currentExam.set,
+                setTitle: currentExam.setData.title,
+                answers: currentExam.answers,
+                bookmarks: Array.from(currentExam.bookmarks),
+                startTime: currentExam.startTime,
+                submitTime: Date.now(),
+                duration: 3600 - currentExam.remainingTime,
+                status: 'submitted',
+                marked: false
+            };
+            
+            // Save to IndexedDB
+            await storage.saveSubmission(submission);
+            
+            // Clear progress
+            await storage.deleteProgress(currentExam.set);
+            
+            // Show confirmation
+            alert('Ujian telah dihantar! Guru akan menanda jawapan anda.');
+            
+            // Return to home
+            showPage('home');
+        }
+
+        function autoSubmitExam() {
+            alert('Masa tamat! Ujian anda akan dihantar secara automatik.');
+            submitExam();
+        }
+
+        function confirmExit() {
+            showModal('confirmExitModal');
+        }
+
+        function exitExam() {
+            saveCurrentTextAnswer();
+            saveProgress();
+            clearInterval(currentExam.timerInterval);
+            closeModal('confirmExitModal');
+            showPage('home');
+        }
+
+        async function saveProgress() {
+            saveCurrentTextAnswer();
+            
+            await storage.saveProgress(currentExam.set, {
+                answers: currentExam.answers,
+                bookmarks: Array.from(currentExam.bookmarks),
+                currentSection: currentExam.currentSection,
+                currentQuestionIndex: currentExam.currentQuestionIndex,
+                remainingTime: currentExam.remainingTime,
+                studentInfo: currentExam.studentInfo
+            });
+        }
+
+        // ============================================
+        // TEACHER MODE
+        // ============================================
+        function showTeacherLogin() {
+            if (markingSystem.hasValidSession()) {
+                showPage('teacher');
+                return;
+            }
+            showModal('teacherLoginModal');
+        }
+
+        function teacherLogin() {
+            const password = document.getElementById('teacherPassword').value;
+            const result = markingSystem.verifyPassword(password);
+            
+            const alert = document.getElementById('loginAlert');
+            const alertMessage = document.getElementById('loginAlertMessage');
+            
+            if (result.success) {
+                closeModal('teacherLoginModal');
+                showPage('teacher');
+            } else {
+                alert.classList.remove('hidden');
+                alertMessage.textContent = result.message;
+            }
+        }
+
+        async function loadTeacherMode() {
+            const submissions = await storage.getAllSubmissions();
+            const grid = document.getElementById('submissionsGrid');
+            
+            if (submissions.length === 0) {
+                grid.innerHTML = '<div class="text-center"><p>Tiada submission lagi.</p></div>';
+                return;
+            }
+            
+            grid.innerHTML = submissions.map((submission, index) => `
+                <div class="submission-card ${submission.marked ? 'marked' : ''}">
+                    <div class="submission-header">
+                        <div class="submission-info">
+                            <h3>${submission.studentInfo.name}</h3>
+                            <div class="submission-meta">
+                                <span>IC: ${submission.studentInfo.ic}</span> | 
+                                <span>Kelas: ${submission.studentInfo.class}</span> | 
+                                <span>${submission.setTitle}</span>
+                            </div>
+                            <div class="submission-meta">
+                                Submitted: ${new Date(submission.submitTime).toLocaleString('ms-MY')}
+                            </div>
+                        </div>
+                        <div>
+                            ${submission.marked ? 
+                                '<span class="badge badge-success">✓ Marked</span>' : 
+                                '<span class="badge badge-warning">Pending</span>'}
+                        </div>
+                    </div>
+                    
+                    <div class="marking-section">
+                        <h4 class="mb-md">Penilaian</h4>
+                        <button class="btn btn-primary" onclick="markSubmission(${submission.id})">
+                            ${submission.marked ? '📝 Edit Markah' : '📝 Tandakan'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function markSubmission(submissionId) {
+            const submissions = await storage.getAllSubmissions();
+            const submission = submissions.find(s => s.id === submissionId);
+            
+            if (!submission) return;
+            
+            // Store current submission for saving later
+            window.currentMarkingSubmission = submission;
+            
+            const setData = EXAM_DATA.sets[submission.set];
+            
+            // Auto-mark Bahagian A
+            const bahagianAResult = markingSystem.markBahagianA(
+                submission.answers,
+                setData.bahagianA
+            );
+            
+            // Update student info
+            document.getElementById('markingStudentInfo').textContent = 
+                `${submission.studentInfo.name} (${submission.studentInfo.ic}) - ${submission.setTitle}`;
+            
+            // Display Bahagian A results
+            document.getElementById('bahagianAScore').textContent = bahagianAResult.score;
+            
+            let bahagianAHTML = '<div class="marking-table"><table style="width: 100%; border-collapse: collapse;">';
+            bahagianAHTML += '<thead><tr><th style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">Soalan</th>';
+            bahagianAHTML += '<th style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">Jawapan Pelajar</th>';
+            bahagianAHTML += '<th style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">Jawapan Betul</th>';
+            bahagianAHTML += '<th style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">Markah</th></tr></thead><tbody>';
+            
+            setData.bahagianA.forEach((q, idx) => {
+                const result = bahagianAResult.results[q.id];
+                const userAns = result.userAnswer !== undefined ? String.fromCharCode(65 + result.userAnswer) : '-';
+                const correctAns = String.fromCharCode(65 + result.correctAnswer);
+                const isCorrect = result.correct;
+                
+                bahagianAHTML += `<tr style="${isCorrect ? 'background: #d1fae5;' : 'background: #fee2e2;'}">`;
+                bahagianAHTML += `<td style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">A${idx+1}</td>`;
+                bahagianAHTML += `<td style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">${userAns}</td>`;
+                bahagianAHTML += `<td style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">${correctAns}</td>`;
+                bahagianAHTML += `<td style="padding: 0.5rem; border-bottom: 1px solid var(--gray-200);">${isCorrect ? '✓ 1' : '✗ 0'}</td>`;
+                bahagianAHTML += '</tr>';
+            });
+            bahagianAHTML += '</tbody></table></div>';
+            document.getElementById('bahagianADetails').innerHTML = bahagianAHTML;
+            
+            // Display Bahagian B marking interface
+            let bahagianBHTML = '';
+            setData.bahagianB.forEach((q, idx) => {
+                const answer = submission.answers[q.id] || '(Tidak dijawab)';
+                const isCanvas = answer.startsWith('data:image');
+                
+                bahagianBHTML += `<div class="card mb-md" style="background: var(--gray-50);">`;
+                bahagianBHTML += `<h4 class="mb-sm">B${idx+1}. ${q.soalan}</h4>`;
+                bahagianBHTML += `<div class="mb-md"><strong>Skema Jawapan:</strong><br>`;
+                
+                if (q.jenis === 'jadual' && q.bahagian) {
+                    bahagianBHTML += '<ul style="margin-left: 1.5rem;">';
+                    q.bahagian.forEach(b => {
+                        bahagianBHTML += `<li>${b.label}: ${b.skema} (${b.markah} markah)</li>`;
+                    });
+                    bahagianBHTML += '</ul>';
+                } else if (q.skema) {
+                    bahagianBHTML += '<ul style="margin-left: 1.5rem;">';
+                    q.skema.forEach(s => {
+                        bahagianBHTML += `<li>${s}</li>`;
+                    });
+                    bahagianBHTML += '</ul>';
+                }
+                
+                bahagianBHTML += `</div>`;
+                bahagianBHTML += `<div class="mb-md"><strong>Jawapan Pelajar:</strong><br>`;
+                
+                if (isCanvas) {
+                    bahagianBHTML += `<img src="${answer}" style="max-width: 100%; border: 1px solid var(--gray-300); border-radius: 8px; margin-top: 0.5rem;">`;
+                } else {
+                    bahagianBHTML += `<div style="padding: 1rem; background: white; border-radius: 8px; margin-top: 0.5rem; white-space: pre-wrap;">${answer}</div>`;
+                }
+                
+                bahagianBHTML += `</div>`;
+                
+                const existingMark = submission.results?.bahagianBMarks?.[q.id] || 0;
+                bahagianBHTML += `<div><label><strong>Markah:</strong></label>`;
+                bahagianBHTML += `<input type="number" class="mark-input" id="mark_${q.id}" min="0" max="${q.jumlahMarkah}" value="${existingMark}" 
+                    onchange="updateTotalMarks()" style="width: 100px; padding: 0.5rem; border: 2px solid var(--gray-300); border-radius: 6px; margin-left: 0.5rem;"> / ${q.jumlahMarkah}</div>`;
+                bahagianBHTML += `</div>`;
+            });
+            document.getElementById('bahagianBMarking').innerHTML = bahagianBHTML;
+            
+            // Display Bahagian C marking interface
+            let bahagianCHTML = '';
+            const cQuestion = setData.bahagianC;
+            
+            bahagianCHTML += `<div class="mb-md"><strong>${cQuestion.soalan}</strong></div>`;
+            
+            cQuestion.subSoalan.forEach((subQ, idx) => {
+                const answer = submission.answers[subQ.id] || '(Tidak dijawab)';
+                const isCanvas = answer.startsWith('data:image');
+                
+                bahagianCHTML += `<div class="card mb-md" style="background: var(--gray-50);">`;
+                bahagianCHTML += `<h4 class="mb-sm">${String.fromCharCode(97 + idx)}) ${subQ.soalan}</h4>`;
+                bahagianCHTML += `<div class="mb-md"><strong>Skema Jawapan:</strong><br><ul style="margin-left: 1.5rem;">`;
+                subQ.skema.forEach(s => {
+                    bahagianCHTML += `<li>${s}</li>`;
+                });
+                bahagianCHTML += `</ul></div>`;
+                
+                bahagianCHTML += `<div class="mb-md"><strong>Jawapan Pelajar:</strong><br>`;
+                
+                if (isCanvas) {
+                    bahagianCHTML += `<img src="${answer}" style="max-width: 100%; border: 1px solid var(--gray-300); border-radius: 8px; margin-top: 0.5rem;">`;
+                } else {
+                    bahagianCHTML += `<div style="padding: 1rem; background: white; border-radius: 8px; margin-top: 0.5rem; white-space: pre-wrap;">${answer}</div>`;
+                }
+                
+                bahagianCHTML += `</div>`;
+                
+                const existingMark = submission.results?.bahagianCMarks?.[subQ.id] || 0;
+                bahagianCHTML += `<div><label><strong>Markah:</strong></label>`;
+                bahagianCHTML += `<input type="number" class="mark-input" id="mark_${subQ.id}" min="0" max="${subQ.markah}" value="${existingMark}" 
+                    onchange="updateTotalMarks()" style="width: 100px; padding: 0.5rem; border: 2px solid var(--gray-300); border-radius: 6px; margin-left: 0.5rem;"> / ${subQ.markah}</div>`;
+                bahagianCHTML += `</div>`;
+            });
+            document.getElementById('bahagianCMarking').innerHTML = bahagianCHTML;
+            
+            // Calculate initial totals
+            updateTotalMarks();
+            
+            // Show modal
+            showModal('markingModal');
+        }
+        
+        function updateTotalMarks() {
+            const submission = window.currentMarkingSubmission;
+            if (!submission) return;
+            
+            const setData = EXAM_DATA.sets[submission.set];
+            
+            // Get Bahagian A score
+            const bahagianAScore = parseInt(document.getElementById('bahagianAScore').textContent) || 0;
+            
+            // Calculate Bahagian B total
+            let bahagianBTotal = 0;
+            setData.bahagianB.forEach(q => {
+                const input = document.getElementById(`mark_${q.id}`);
+                if (input) {
+                    bahagianBTotal += parseInt(input.value) || 0;
+                }
+            });
+            document.getElementById('totalBahagianB').textContent = bahagianBTotal;
+            
+            // Calculate Bahagian C total
+            let bahagianCTotal = 0;
+            setData.bahagianC.subSoalan.forEach(subQ => {
+                const input = document.getElementById(`mark_${subQ.id}`);
+                if (input) {
+                    bahagianCTotal += parseInt(input.value) || 0;
+                }
+            });
+            document.getElementById('totalBahagianC').textContent = bahagianCTotal;
+            
+            // Calculate total score
+            const totalScore = bahagianAScore + bahagianBTotal + bahagianCTotal;
+            const percentage = (totalScore / 40) * 100;
+            const grade = markingSystem.calculateGrade(percentage);
+            
+            document.getElementById('totalScore').textContent = `${totalScore}/40`;
+            document.getElementById('totalGrade').textContent = `Gred: ${grade} (${percentage.toFixed(1)}%)`;
+        }
+        
+        async function saveMarking() {
+            const submission = window.currentMarkingSubmission;
+            if (!submission) return;
+            
+            const setData = EXAM_DATA.sets[submission.set];
+            
+            // Get Bahagian A result (already calculated)
+            const bahagianAResult = markingSystem.markBahagianA(
+                submission.answers,
+                setData.bahagianA
+            );
+            
+            // Collect Bahagian B marks
+            const bahagianBMarks = {};
+            let bahagianBTotal = 0;
+            setData.bahagianB.forEach(q => {
+                const input = document.getElementById(`mark_${q.id}`);
+                if (input) {
+                    const mark = parseInt(input.value) || 0;
+                    bahagianBMarks[q.id] = mark;
+                    bahagianBTotal += mark;
+                }
+            });
+            
+            // Collect Bahagian C marks
+            const bahagianCMarks = {};
+            let bahagianCTotal = 0;
+            setData.bahagianC.subSoalan.forEach(subQ => {
+                const input = document.getElementById(`mark_${subQ.id}`);
+                if (input) {
+                    const mark = parseInt(input.value) || 0;
+                    bahagianCMarks[subQ.id] = mark;
+                    bahagianCTotal += mark;
+                }
+            });
+            
+            // Calculate totals
+            const totalMarks = bahagianAResult.score + bahagianBTotal + bahagianCTotal;
+            const percentage = (totalMarks / 40) * 100;
+            const grade = markingSystem.calculateGrade(percentage);
+            const pointer = markingSystem.calculatePointer(percentage);
+            
+            // Update submission
+            submission.marked = true;
+            submission.results = {
+                bahagianA: bahagianAResult,
+                bahagianB: { score: bahagianBTotal, total: 20, marks: bahagianBMarks },
+                bahagianC: { score: bahagianCTotal, total: 10, marks: bahagianCMarks },
+                bahagianBMarks: bahagianBMarks,
+                bahagianCMarks: bahagianCMarks,
+                totalMarks,
+                percentage,
+                grade,
+                pointer
+            };
+            
+            await storage.updateSubmission(submission.id, submission);
+            
+            closeModal('markingModal');
+            
+            alert(`✓ Penilaian disimpan!\n\nJumlah: ${totalMarks}/40\nGred: ${grade}\nPointer: ${pointer}`);
+            
+            loadTeacherMode();
+        }
+
+        // ============================================
+        // ANALYTICS
+        // ============================================
+        async function loadAnalytics() {
+            const submissions = await storage.getAllSubmissions();
+            const markedSubmissions = submissions.filter(s => s.marked);
+            
+            if (markedSubmissions.length === 0) {
+                document.getElementById('statsGrid').innerHTML = 
+                    '<div class="text-center"><p>Belum ada data untuk dianalisis.</p></div>';
+                return;
+            }
+            
+            // Calculate stats
+            const totalExams = markedSubmissions.length;
+            const avgScore = markedSubmissions.reduce((sum, s) => sum + s.results.totalMarks, 0) / totalExams;
+            const avgPercentage = markedSubmissions.reduce((sum, s) => sum + s.results.percentage, 0) / totalExams;
+            const bestScore = Math.max(...markedSubmissions.map(s => s.results.totalMarks));
+            
+            // Render stats
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Jumlah Ujian</div>
+                    <div class="stat-value">${totalExams}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Purata Markah</div>
+                    <div class="stat-value">${avgScore.toFixed(1)}/40</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Purata Peratus</div>
+                    <div class="stat-value">${avgPercentage.toFixed(1)}%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Markah Tertinggi</div>
+                    <div class="stat-value">${bestScore}/40</div>
+                </div>
+            `;
+            
+            // Performance chart
+            renderPerformanceChart(markedSubmissions);
+            
+            // Topic chart
+            renderTopicChart(markedSubmissions);
+            
+            // Achievements
+            renderAchievements(markedSubmissions);
+        }
+
+        function renderPerformanceChart(submissions) {
+            const ctx = document.getElementById('performanceChart');
+            if (!ctx) return;
+            
+            const labels = submissions.map((s, i) => `Ujian ${i+1}`);
+            const scores = submissions.map(s => s.results.totalMarks);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Markah',
+                        data: scores,
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 40
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTopicChart(submissions) {
+            const ctx = document.getElementById('topicChart');
+            if (!ctx) return;
+            
+            // Calculate average performance by topic
+            const topics = {};
+            
+            submissions.forEach(submission => {
+                const setData = EXAM_DATA.sets[submission.set];
+                const results = submission.results.bahagianA.results;
+                
+                setData.bahagianA.forEach(q => {
+                    const topic = q.topik || 'Lain-lain';
+                    if (!topics[topic]) {
+                        topics[topic] = { correct: 0, total: 0 };
+                    }
+                    topics[topic].total++;
+                    if (results[q.id] && results[q.id].correct) {
+                        topics[topic].correct++;
+                    }
+                });
+            });
+            
+            const labels = Object.keys(topics);
+            const percentages = labels.map(topic => 
+                (topics[topic].correct / topics[topic].total * 100).toFixed(1)
+            );
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Peratus Betul (%)',
+                        data: percentages,
+                        backgroundColor: '#2563eb'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderAchievements(submissions) {
+            const grid = document.getElementById('achievementsGrid');
+            
+            const achievements = [
+                {
+                    icon: '🎯',
+                    title: 'First Try',
+                    description: 'Selesai ujian pertama',
+                    unlocked: submissions.length >= 1
+                },
+                {
+                    icon: '⭐',
+                    title: 'Perfect Score',
+                    description: 'Dapat markah penuh',
+                    unlocked: submissions.some(s => s.results.totalMarks === 40)
+                },
+                {
+                    icon: '🔥',
+                    title: 'Streak Master',
+                    description: 'Selesai 5 ujian',
+                    unlocked: submissions.length >= 5
+                },
+                {
+                    icon: '💎',
+                    title: 'Excellence',
+                    description: 'Dapat A+ dalam ujian',
+                    unlocked: submissions.some(s => s.results.grade === 'A+')
+                },
+                {
+                    icon: '📚',
+                    title: 'Dedicated',
+                    description: 'Selesai semua 5 set',
+                    unlocked: new Set(submissions.map(s => s.set)).size === 5
+                },
+                {
+                    icon: '🚀',
+                    title: 'Speed Runner',
+                    description: 'Selesai dalam 30 minit',
+                    unlocked: submissions.some(s => s.duration <= 1800)
+                }
+            ];
+            
+            grid.innerHTML = achievements.map(achievement => `
+                <div class="achievement-card ${achievement.unlocked ? '' : 'locked'}">
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-desc">${achievement.description}</div>
+                    ${achievement.unlocked ? '<div class="badge badge-success">Unlocked</div>' : '<div class="badge">Locked</div>'}
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // PDF EXPORT
+        // ============================================
+        function exportToPDF() {
+            // This would use jsPDF to generate a PDF report
+            alert('PDF export feature - akan dilaksanakan');
+            
+            // Example implementation:
+            /*
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.text('Laporan Keputusan Ujian', 20, 20);
+            
+            // Add content...
+            
+            doc.save('keputusan-ujian.pdf');
+            */
+        }
+    </script>
+</body>
+</html>

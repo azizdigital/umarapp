@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umar Apps - Smart Learning Hub</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Platform pembelajaran komprehensif untuk semua mata pelajaran Form 1">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Umar Apps">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colors */
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --secondary-light: #fef3c7;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            /* Grays */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            /* Semantic */
+            --surface: #ffffff;
+            --background: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            
+            /* Transitions */
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: white;
+            padding: 4px;
+        }
+        
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .brand h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .brand .tagline {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+        
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-2xl);
+            color: white;
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .welcome-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .welcome-content p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .welcome-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .welcome-stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+        }
+        
+        .welcome-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .welcome-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        /* Subjects Section */
+        .subjects-section {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--spacing-md);
+        }
+        
+        .subject-card {
+            background: var(--gray-50);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        
+        .subject-card.completed {
+            border-color: var(--success);
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+        
+        .subject-card.in-progress {
+            border-color: var(--warning);
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        
+        .subject-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .subject-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .subject-code {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .subject-progress {
+            margin-top: var(--spacing-sm);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+        
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+        }
+        
+        .card-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        /* Study Timer */
+        .timer-display {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .timer-time {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .timer-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .timer-controls {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--text-primary);
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .activity-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .activity-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .activity-score {
+            font-weight: 600;
+            color: var(--success);
+            font-size: 0.875rem;
+        }
+        
+        /* Achievements */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .achievement-card {
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            text-align: center;
+            position: relative;
+        }
+        
+        .achievement-card.unlocked {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid var(--secondary);
+        }
+        
+        .achievement-card.locked {
+            opacity: 0.5;
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .achievement-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .achievement-desc {
+            font-size: 0.625rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Calendar */
+        .calendar-widget {
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .calendar-nav {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: var(--spacing-xs);
+        }
+        
+        .calendar-month {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .calendar-day-label {
+            text-align: center;
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: var(--spacing-xs);
+        }
+        
+        .calendar-date {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        
+        .calendar-date:hover {
+            background: var(--gray-200);
+        }
+        
+        .calendar-date.today {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .calendar-date.has-activity {
+            background: var(--success);
+            color: white;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .modal-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Settings Form */
+        .settings-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .settings-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.875rem;
+        }
+        
+        .settings-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+        }
+        
+        .settings-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Parent Dashboard */
+        .progress-chart {
+            height: 200px;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .stat-card {
+            background: var(--gray-50);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-xs);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            .brand h1 {
+                font-size: 1.25rem;
+            }
+            
+            .brand .tagline {
+                font-size: 0.75rem;
+            }
+            
+            .welcome-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: var(--spacing-md);
+            }
+        }
+        
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+        
+        .mb-sm { margin-bottom: var(--spacing-sm); }
+        .mb-md { margin-bottom: var(--spacing-md); }
+        .mb-lg { margin-bottom: var(--spacing-lg); }
+        .mt-sm { margin-top: var(--spacing-sm); }
+        .mt-md { margin-top: var(--spacing-md); }
+        .mt-lg { margin-top: var(--spacing-lg); }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="icons/icon-192.png" alt="Umar Apps Logo" class="logo">
+                <div class="brand">
+                    <h1>Umar Apps</h1>
+                    <span class="tagline">Smart Learning Hub</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" onclick="showParentDashboard()">
+                    👨‍👩‍👦 Dashboard Ibu Bapa
+                </button>
+                <button class="header-btn" onclick="showSettings()">
+                    ⚙️ Tetapan
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <h2>Selamat Datang, <span id="studentName">Umar Qusyairi</span>! 👋</h2>
+                <p>Teruskan usaha hebat anda! Hari ini adalah peluang baru untuk belajar sesuatu yang menarik.</p>
+                
+                <div class="welcome-stats">
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="totalExams">0</div>
+                        <div class="welcome-stat-label">Ujian Selesai</div>
+                    </div>
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="avgScore">0%</div>
+                        <div class="welcome-stat-label">Purata Markah</div>
+                    </div>
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="studyStreak">0</div>
+                        <div class="welcome-stat-label">Hari Berturut-turut</div>
+                    </div>
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="totalStudyTime">0h</div>
+                        <div class="welcome-stat-label">Masa Belajar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Subjects Section -->
+            <div class="subjects-section">
+                <div class="section-header">
+                    <h2 class="section-title">📚 Mata Pelajaran</h2>
+                </div>
+                
+                <div class="subjects-grid">
+                    <!-- ASK - Already exists -->
+                    <a href="pages/ask.html" class="subject-card" data-subject="ASK">
+                        <div class="subject-icon">💻</div>
+                        <div class="subject-name">Asas Sains Komputer</div>
+                        <div class="subject-code">ASK</div>
+                        <div class="subject-progress">5 ujian tersedia</div>
+                    </a>
+                    
+                    <!-- Bahasa Melayu -->
+                    <a href="pages/bm.html" class="subject-card" data-subject="BM">
+                        <div class="subject-icon">📖</div>
+                        <div class="subject-name">Bahasa Melayu</div>
+                        <div class="subject-code">BM</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- English -->
+                    <a href="pages/eng.html" class="subject-card" data-subject="ENG">
+                        <div class="subject-icon">🌍</div>
+                        <div class="subject-name">Bahasa Inggeris</div>
+                        <div class="subject-code">ENG</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Geografi -->
+                    <a href="pages/geo.html" class="subject-card" data-subject="GEO">
+                        <div class="subject-icon">🗺️</div>
+                        <div class="subject-name">Geografi</div>
+                        <div class="subject-code">GEO</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Matematik -->
+                    <a href="pages/mtk.html" class="subject-card" data-subject="MTK">
+                        <div class="subject-icon">🧮</div>
+                        <div class="subject-name">Matematik</div>
+                        <div class="subject-code">MTK</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Perhimpunan -->
+                    <a href="pages/perh.html" class="subject-card" data-subject="P_PERH">
+                        <div class="subject-icon">🏫</div>
+                        <div class="subject-name">Perhimpunan</div>
+                        <div class="subject-code">P PERH</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Pendidikan Islam -->
+                    <a href="pages/pi.html" class="subject-card" data-subject="PI">
+                        <div class="subject-icon">☪️</div>
+                        <div class="subject-name">Pendidikan Islam</div>
+                        <div class="subject-code">PI</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Pendidikan Jasmani -->
+                    <a href="pages/pjpk.html" class="subject-card" data-subject="PJPK">
+                        <div class="subject-icon">⚽</div>
+                        <div class="subject-name">Pendidikan Jasmani</div>
+                        <div class="subject-code">PJPK</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Pendidikan Seni -->
+                    <a href="pages/ps.html" class="subject-card" data-subject="PS">
+                        <div class="subject-icon">🎨</div>
+                        <div class="subject-name">Pendidikan Seni Visual</div>
+                        <div class="subject-code">PS</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Rekabentuk Teknologi -->
+                    <a href="pages/art.html" class="subject-card" data-subject="ART">
+                        <div class="subject-icon">🛠️</div>
+                        <div class="subject-name">Rekabentuk Teknologi</div>
+                        <div class="subject-code">ART</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Sejarah -->
+                    <a href="pages/sj.html" class="subject-card" data-subject="SJ">
+                        <div class="subject-icon">📜</div>
+                        <div class="subject-name">Sejarah</div>
+                        <div class="subject-code">SJ</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                    
+                    <!-- Sains -->
+                    <a href="pages/sn.html" class="subject-card" data-subject="SN">
+                        <div class="subject-icon">🔬</div>
+                        <div class="subject-name">Sains</div>
+                        <div class="subject-code">SN</div>
+                        <div class="subject-progress">Akan datang</div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Study Timer -->
+                <div class="card">
+                    <h3 class="card-title">⏱️ Pemasa Belajar</h3>
+                    <div class="timer-display">
+                        <div class="timer-time" id="timerDisplay">00:00</div>
+                        <div class="timer-label">Masa Belajar Hari Ini</div>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="btn btn-primary" id="startTimer" onclick="toggleTimer()">▶️ Mula</button>
+                        <button class="btn btn-secondary" id="resetTimer" onclick="resetTimer()">🔄 Reset</button>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="card">
+                    <h3 class="card-title">📊 Aktiviti Terkini</h3>
+                    <div class="activity-list" id="activityList">
+                        <div style="text-align: center; color: var(--text-secondary); padding: var(--spacing-lg);">
+                            Tiada aktiviti lagi. Mula buat ujian!
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Achievements -->
+                <div class="card">
+                    <h3 class="card-title">🏆 Pencapaian</h3>
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">🎯</div>
+                            <div class="achievement-name">Percubaan Pertama</div>
+                            <div class="achievement-desc">Selesaikan 1 ujian</div>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">⭐</div>
+                            <div class="achievement-name">Markah Sempurna</div>
+                            <div class="achievement-desc">Dapat 100%</div>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-name">Streak Master</div>
+                            <div class="achievement-desc">Belajar 7 hari berturut</div>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">💎</div>
+                            <div class="achievement-name">Kecemerlangan</div>
+                            <div class="achievement-desc">Dapat gred A+</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calendar -->
+                <div class="card">
+                    <h3 class="card-title">📅 Kalendar</h3>
+                    <div class="calendar-widget">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" onclick="previousMonth()">◀</button>
+                            <span class="calendar-month" id="calendarMonth">Januari 2026</span>
+                            <button class="calendar-nav" onclick="nextMonth()">▶</button>
+                        </div>
+                        <div class="calendar-days">
+                            <div class="calendar-day-label">Ahd</div>
+                            <div class="calendar-day-label">Isn</div>
+                            <div class="calendar-day-label">Sel</div>
+                            <div class="calendar-day-label">Rab</div>
+                            <div class="calendar-day-label">Kha</div>
+                            <div class="calendar-day-label">Jum</div>
+                            <div class="calendar-day-label">Sab</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDates">
+                            <!-- Calendar dates will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙️ Tetapan</h2>
+                <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Nama Pelajar</label>
+                <input type="text" class="settings-input" id="settingsName" value="Umar Qusyairi">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Kelas</label>
+                <input type="text" class="settings-input" id="settingsClass" value="1 Amanah">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">No. IC</label>
+                <input type="text" class="settings-input" id="settingsIC" value="">
+            </div>
+            
+            <div class="settings-group">
+                <label class="settings-label">Matlamat Harian (minit)</label>
+                <input type="number" class="settings-input" id="settingsDailyGoal" value="60">
+            </div>
+            
+            <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+                <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Batal</button>
+                <button class="btn btn-success" style="flex: 1;" onclick="saveSettings()">💾 Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Dashboard Modal -->
+    <div id="parentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">👨‍👩‍👦 Dashboard Ibu Bapa</h2>
+                <button class="modal-close" onclick="closeModal('parentModal')">✕</button>
+            </div>
+            
+            <div class="mb-lg">
+                <h3 style="margin-bottom: var(--spacing-md);">Statistik Pembelajaran</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="parentTotalExams">0</div>
+                        <div class="stat-label">Ujian Selesai</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="parentAvgScore">0%</div>
+                        <div class="stat-label">Purata Markah</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="parentStudyTime">0h</div>
+                        <div class="stat-label">Masa Belajar</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="parentStreak">0</div>
+                        <div class="stat-label">Hari Berturut</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-lg">
+                <h3 style="margin-bottom: var(--spacing-md);">Prestasi Mengikut Subjek</h3>
+                <div id="subjectPerformance" style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div>
+                <h3 style="margin-bottom: var(--spacing-md);">Aktiviti 7 Hari Terakhir</h3>
+                <div class="progress-chart">
+                    📊 Graf akan dipaparkan di sini
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // INDEXEDDB SETUP
+        // ============================================
+        class UmarAppsDB {
+            constructor() {
+                this.dbName = 'UmarAppsDB';
+                this.version = 1;
+                this.db = null;
+            }
+            
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve(this.db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // Settings store
+                        if (!db.objectStoreNames.contains('settings')) {
+                            db.createObjectStore('settings', { keyPath: 'key' });
+                        }
+                        
+                        // Study sessions store
+                        if (!db.objectStoreNames.contains('studySessions')) {
+                            const store = db.createObjectStore('studySessions', { keyPath: 'id', autoIncrement: true });
+                            store.createIndex('date', 'date', { unique: false });
+                            store.createIndex('subject', 'subject', { unique: false });
+                        }
+                        
+                        // Activities store
+                        if (!db.objectStoreNames.contains('activities')) {
+                            const store = db.createObjectStore('activities', { keyPath: 'id', autoIncrement: true });
+                            store.createIndex('date', 'date', { unique: false });
+                            store.createIndex('type', 'type', { unique: false });
+                        }
+                        
+                        // Achievements store
+                        if (!db.objectStoreNames.contains('achievements')) {
+                            db.createObjectStore('achievements', { keyPath: 'id' });
+                        }
+                    };
+                });
+            }
+            
+            async getSetting(key) {
+                const tx = this.db.transaction(['settings'], 'readonly');
+                const store = tx.objectStore('settings');
+                return new Promise((resolve) => {
+                    const request = store.get(key);
+                    request.onsuccess = () => resolve(request.result?.value);
+                    request.onerror = () => resolve(null);
+                });
+            }
+            
+            async setSetting(key, value) {
+                const tx = this.db.transaction(['settings'], 'readwrite');
+                const store = tx.objectStore('settings');
+                return store.put({ key, value });
+            }
+            
+            async addActivity(activity) {
+                const tx = this.db.transaction(['activities'], 'readwrite');
+                const store = tx.objectStore('activities');
+                return store.add(activity);
+            }
+            
+            async getRecentActivities(limit = 5) {
+                const tx = this.db.transaction(['activities'], 'readonly');
+                const store = tx.objectStore('activities');
+                return new Promise((resolve) => {
+                    const request = store.getAll();
+                    request.onsuccess = () => {
+                        const activities = request.result || [];
+                        resolve(activities.sort((a, b) => b.date - a.date).slice(0, limit));
+                    };
+                    request.onerror = () => resolve([]);
+                });
+            }
+            
+            async addStudySession(session) {
+                const tx = this.db.transaction(['studySessions'], 'readwrite');
+                const store = tx.objectStore('studySessions');
+                return store.add(session);
+            }
+            
+            async getStudySessions() {
+                const tx = this.db.transaction(['studySessions'], 'readonly');
+                const store = tx.objectStore('studySessions');
+                return new Promise((resolve) => {
+                    const request = store.getAll();
+                    request.onsuccess = () => resolve(request.result || []);
+                    request.onerror = () => resolve([]);
+                });
+            }
+            
+            async unlockAchievement(achievementId) {
+                const tx = this.db.transaction(['achievements'], 'readwrite');
+                const store = tx.objectStore('achievements');
+                return store.put({ 
+                    id: achievementId, 
+                    unlocked: true, 
+                    date: Date.now() 
+                });
+            }
+            
+            async getAchievement(achievementId) {
+                const tx = this.db.transaction(['achievements'], 'readonly');
+                const store = tx.objectStore('achievements');
+                return new Promise((resolve) => {
+                    const request = store.get(achievementId);
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => resolve(null);
+                });
+            }
+        }
+        
+        const db = new UmarAppsDB();
+        
+        // ============================================
+        // STUDY TIMER
+        // ============================================
+        let timerRunning = false;
+        let timerStartTime = null;
+        let timerElapsed = 0;
+        let timerInterval = null;
+        
+        async function toggleTimer() {
+            if (!timerRunning) {
+                startTimer();
+            } else {
+                stopTimer();
+            }
+        }
+        
+        function startTimer() {
+            timerRunning = true;
+            timerStartTime = Date.now() - timerElapsed;
+            
+            document.getElementById('startTimer').innerHTML = '⏸️ Pause';
+            
+            timerInterval = setInterval(() => {
+                timerElapsed = Date.now() - timerStartTime;
+                updateTimerDisplay();
+            }, 1000);
+        }
+        
+        async function stopTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            
+            document.getElementById('startTimer').innerHTML = '▶️ Mula';
+            
+            // Save study session
+            if (timerElapsed > 0) {
+                await db.addStudySession({
+                    date: Date.now(),
+                    duration: timerElapsed,
+                    subject: 'general'
+                });
+                
+                await loadDashboardStats();
+            }
+        }
+        
+        async function resetTimer() {
+            if (timerRunning) {
+                stopTimer();
+            }
+            timerElapsed = 0;
+            updateTimerDisplay();
+        }
+        
+        function updateTimerDisplay() {
+            const seconds = Math.floor(timerElapsed / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            
+            const displayMinutes = minutes % 60;
+            const displaySeconds = seconds % 60;
+            
+            if (hours > 0) {
+                document.getElementById('timerDisplay').textContent = 
+                    `${hours}:${String(displayMinutes).padStart(2, '0')}:${String(displaySeconds).padStart(2, '0')}`;
+            } else {
+                document.getElementById('timerDisplay').textContent = 
+                    `${String(displayMinutes).padStart(2, '0')}:${String(displaySeconds).padStart(2, '0')}`;
+            }
+        }
+        
+        // ============================================
+        // CALENDAR
+        // ============================================
+        let currentCalendarMonth = new Date().getMonth();
+        let currentCalendarYear = new Date().getFullYear();
+        
+        function renderCalendar() {
+            const monthNames = ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 
+                              'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'];
+            
+            document.getElementById('calendarMonth').textContent = 
+                `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+            
+            const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+            const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+            const today = new Date();
+            
+            const datesContainer = document.getElementById('calendarDates');
+            datesContainer.innerHTML = '';
+            
+            // Empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-date';
+                datesContainer.appendChild(emptyCell);
+            }
+            
+            // Actual dates
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateCell = document.createElement('div');
+                dateCell.className = 'calendar-date';
+                dateCell.textContent = day;
+                
+                if (day === today.getDate() && 
+                    currentCalendarMonth === today.getMonth() && 
+                    currentCalendarYear === today.getFullYear()) {
+                    dateCell.classList.add('today');
+                }
+                
+                datesContainer.appendChild(dateCell);
+            }
+        }
+        
+        function previousMonth() {
+            currentCalendarMonth--;
+            if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            renderCalendar();
+        }
+        
+        function nextMonth() {
+            currentCalendarMonth++;
+            if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            renderCalendar();
+        }
+        
+        // ============================================
+        // DASHBOARD STATS
+        // ============================================
+        async function loadDashboardStats() {
+            // Get all study sessions
+            const sessions = await db.getStudySessions();
+            
+            // Total study time
+            const totalMinutes = Math.floor(sessions.reduce((sum, s) => sum + s.duration, 0) / 60000);
+            const totalHours = Math.floor(totalMinutes / 60);
+            document.getElementById('totalStudyTime').textContent = totalHours > 0 ? `${totalHours}h` : `${totalMinutes}m`;
+            
+            // Calculate streak (simplified - days with activity)
+            const today = new Date().setHours(0, 0, 0, 0);
+            const datesWithActivity = new Set(
+                sessions.map(s => new Date(s.date).setHours(0, 0, 0, 0))
+            );
+            
+            let streak = 0;
+            let checkDate = today;
+            while (datesWithActivity.has(checkDate)) {
+                streak++;
+                checkDate -= 86400000; // 1 day in ms
+            }
+            document.getElementById('studyStreak').textContent = streak;
+            
+            // Get exam stats (would integrate with exam-system.html data)
+            // For now, placeholder
+            document.getElementById('totalExams').textContent = '0';
+            document.getElementById('avgScore').textContent = '0%';
+        }
+        
+        // ============================================
+        // RECENT ACTIVITY
+        // ============================================
+        async function loadRecentActivity() {
+            const activities = await db.getRecentActivities(5);
+            
+            const activityList = document.getElementById('activityList');
+            
+            if (activities.length === 0) {
+                activityList.innerHTML = `
+                    <div style="text-align: center; color: var(--text-secondary); padding: var(--spacing-lg);">
+                        Tiada aktiviti lagi. Mula buat ujian!
+                    </div>
+                `;
+                return;
+            }
+            
+            activityList.innerHTML = activities.map(activity => {
+                const date = new Date(activity.date);
+                const timeAgo = getTimeAgo(date);
+                
+                let icon = '📚';
+                if (activity.type === 'exam') icon = '📝';
+                if (activity.type === 'study') icon = '📖';
+                if (activity.type === 'achievement') icon = '🏆';
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon">${icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-title">${activity.title}</div>
+                            <div class="activity-meta">
+                                ${activity.subject || ''} · ${timeAgo}
+                                ${activity.score ? `<span class="activity-score"> · ${activity.score}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((Date.now() - date) / 1000);
+            
+            if (seconds < 60) return 'Baru sahaja';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} minit lalu`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} jam lalu`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)} hari lalu`;
+            
+            return date.toLocaleDateString('ms-MY');
+        }
+        
+        // ============================================
+        // SETTINGS
+        // ============================================
+        function showSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+            loadSettingsData();
+        }
+        
+        async function loadSettingsData() {
+            const name = await db.getSetting('studentName') || 'Umar Qusyairi';
+            const className = await db.getSetting('studentClass') || '1 Amanah';
+            const ic = await db.getSetting('studentIC') || '';
+            const dailyGoal = await db.getSetting('dailyGoal') || 60;
+            
+            document.getElementById('settingsName').value = name;
+            document.getElementById('settingsClass').value = className;
+            document.getElementById('settingsIC').value = ic;
+            document.getElementById('settingsDailyGoal').value = dailyGoal;
+        }
+        
+        async function saveSettings() {
+            const name = document.getElementById('settingsName').value;
+            const className = document.getElementById('settingsClass').value;
+            const ic = document.getElementById('settingsIC').value;
+            const dailyGoal = document.getElementById('settingsDailyGoal').value;
+            
+            await db.setSetting('studentName', name);
+            await db.setSetting('studentClass', className);
+            await db.setSetting('studentIC', ic);
+            await db.setSetting('dailyGoal', dailyGoal);
+            
+            document.getElementById('studentName').textContent = name;
+            
+            closeModal('settingsModal');
+            alert('✓ Tetapan disimpan!');
+        }
+        
+        // ============================================
+        // PARENT DASHBOARD
+        // ============================================
+        function showParentDashboard() {
+            document.getElementById('parentModal').classList.add('active');
+            loadParentDashboard();
+        }
+        
+        async function loadParentDashboard() {
+            // Copy stats from main dashboard
+            document.getElementById('parentTotalExams').textContent = 
+                document.getElementById('totalExams').textContent;
+            document.getElementById('parentAvgScore').textContent = 
+                document.getElementById('avgScore').textContent;
+            document.getElementById('parentStudyTime').textContent = 
+                document.getElementById('totalStudyTime').textContent;
+            document.getElementById('parentStreak').textContent = 
+                document.getElementById('studyStreak').textContent;
+            
+            // Subject performance (placeholder)
+            const subjectPerf = document.getElementById('subjectPerformance');
+            subjectPerf.innerHTML = `
+                <div style="text-align: center; color: var(--text-secondary); padding: var(--spacing-lg);">
+                    Data prestasi akan dipaparkan selepas ujian selesai.
+                </div>
+            `;
+        }
+        
+        // ============================================
+        // MODAL CONTROLS
+        // ============================================
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+        
+        // ============================================
+        // ACHIEVEMENTS
+        // ============================================
+        async function checkAchievements() {
+            const sessions = await db.getStudySessions();
+            const achievements = [
+                { id: 'first-exam', condition: sessions.length >= 1, icon: '🎯', name: 'Percubaan Pertama' },
+                { id: 'perfect-score', condition: false, icon: '⭐', name: 'Markah Sempurna' },
+                { id: 'streak-7', condition: false, icon: '🔥', name: 'Streak Master' },
+                { id: 'grade-a-plus', condition: false, icon: '💎', name: 'Kecemerlangan' }
+            ];
+            
+            for (const achievement of achievements) {
+                if (achievement.condition) {
+                    const existing = await db.getAchievement(achievement.id);
+                    if (!existing) {
+                        await db.unlockAchievement(achievement.id);
+                        showAchievementNotification(achievement);
+                    }
+                }
+            }
+            
+            renderAchievements();
+        }
+        
+        async function renderAchievements() {
+            const achievementsList = [
+                { id: 'first-exam', icon: '🎯', name: 'Percubaan Pertama', desc: 'Selesaikan 1 ujian' },
+                { id: 'perfect-score', icon: '⭐', name: 'Markah Sempurna', desc: 'Dapat 100%' },
+                { id: 'streak-7', icon: '🔥', name: 'Streak Master', desc: 'Belajar 7 hari berturut' },
+                { id: 'grade-a-plus', icon: '💎', name: 'Kecemerlangan', desc: 'Dapat gred A+' }
+            ];
+            
+            const grid = document.getElementById('achievementsGrid');
+            grid.innerHTML = '';
+            
+            for (const achievement of achievementsList) {
+                const unlocked = await db.getAchievement(achievement.id);
+                
+                const card = document.createElement('div');
+                card.className = `achievement-card ${unlocked ? 'unlocked' : 'locked'}`;
+                card.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-name">${achievement.name}</div>
+                    <div class="achievement-desc">${achievement.desc}</div>
+                `;
+                grid.appendChild(card);
+            }
+        }
+        
+        function showAchievementNotification(achievement) {
+            // Simple alert for now
+            alert(`🎉 Pencapaian Baru!\n\n${achievement.icon} ${achievement.name}`);
+        }
+        
+        // ============================================
+        // SUBJECT CARD STATUS
+        // ============================================
+        async function updateSubjectCards() {
+            // This would integrate with each subject's exam system
+            // For now, mark ASK as available
+            const askCard = document.querySelector('[data-subject="ASK"]');
+            if (askCard) {
+                askCard.classList.add('in-progress');
+            }
+        }
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        async function initApp() {
+            try {
+                await db.init();
+                
+                // Load student name
+                const studentName = await db.getSetting('studentName') || 'Umar Qusyairi';
+                document.getElementById('studentName').textContent = studentName;
+                
+                // Load all dashboard data
+                await loadDashboardStats();
+                await loadRecentActivity();
+                await renderAchievements();
+                await updateSubjectCards();
+                
+                // Initialize calendar
+                renderCalendar();
+                
+                // Check for achievements
+                await checkAchievements();
+                
+                console.log('✓ Umar Apps initialized successfully!');
+            } catch (error) {
+                console.error('Error initializing app:', error);
+            }
+        }
+        
+        // Start the app when page loads
+        window.addEventListener('DOMContentLoaded', initApp);
+        
+        // Save timer state before leaving
+        window.addEventListener('beforeunload', () => {
+            if (timerRunning) {
+                stopTimer();
+            }
+        });
+        
+        // ============================================
+        // PWA SERVICE WORKER REGISTRATION
+        // ============================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✓ Service Worker registered successfully:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('New Service Worker found, installing...');
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('New Service Worker installed, refresh to update');
+                                    // Optionally show update notification
+                                    if (confirm('Update tersedia! Refresh untuk update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('✗ Service Worker registration failed:', error);
+                    });
+            });
+        } else {
+            console.log('Service Worker not supported in this browser');
+        }
+        
+        // PWA Install prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('PWA install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom install button (optional)
+            // You can create a button in UI to trigger installation
+        });
+        
+        // Function to trigger PWA installation
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User ${outcome} the installation`);
+                deferredPrompt = null;
+            }
+        }
+        
+        window.addEventListener('appinstalled', () => {
+            console.log('✓ PWA installed successfully!');
+            deferredPrompt = null;
+        });
+    </script>
+</body>
+</html>
